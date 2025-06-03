@@ -13,10 +13,11 @@
         <t t-set="company" t-value="company or o.company_id.sudo()" />
         <div class="header">
             <div class="row">
-                <div class="col-3 mb4">
-                    <!-- Uncomment to display logo -->
-                    <!-- <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 140px;" /> -->
-                    <span t-esc="company.name"/>
+                <div class="col-12 mb4">
+                    <div class="text-center">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 140px;" />
+                        <h2 t-esc="company.name"/>
+                    </div>
                 </div>
             </div>
         </div>
