@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="sub_folder_files_form" model="ir.ui.view">
         <field name="name">sub.folder.files.form</field>
@@ -55,20 +56,7 @@
                     </group>
                     <notebook>
                         <page string="Documents">
-                            <field name="document_ids">
-                                <list decoration-success="is_verify == True">
-                                    <field name="name"/>
-                                    <field name="issue_date"/>
-                                    <field name="expiration_date"/>
-                                    <field name="type_id"/>
-                                    <field name="category_id"/>
-                                    <field name="expiration_reminder"/>
-                                    <field name="partner_id"/>
-                                    <field name="create_uid"/>
-                                    <field name="is_verify"/>
-                                    <field name="create_uid"/>
-                                </list>
-                            </field>
+                            <field name="document_ids" widget="many2many_tags"/>
                         </page>
                         <page string="Document Handover">
                             <field name="attachment_ids" widget="many2many_binary" class="oe_inline"/>
