@@ -1,0 +1,46 @@
+<odoo>
+    <record model="ir.module.category" id="module_crm_lead">
+        <field name="name">Crm Access</field>
+        <field name="sequence">12</field>
+    </record>
+    <record id="crm_lead_convert_lead_group" model="res.groups">
+        <field name="name">Convert Lead Button</field>
+        <field name="category_id" ref="module_crm_lead"/>
+    </record>
+    <record id="crm_lead_user_group" model="res.groups">
+        <field name="name">Lead User</field>
+        <field name="category_id" ref="module_crm_lead"/>
+    </record>
+    <record id="crm_lead_admin_group" model="res.groups">
+        <field name="name">Lead Admin</field>
+        <field name="category_id" ref="module_crm_lead"/>
+    </record>
+    <record id="crm_lead_user_rule" model="ir.rule">
+        <field name="name">Access Leads User</field>
+        <field ref="crm.model_crm_lead" name="model_id"/>
+        <field name="domain_force">
+            ['|',('user_id','=',user.id),('user_id','=',False)]
+        </field>
+        <field name="groups"
+               eval="[(4, ref('crm_log.crm_lead_user_group'))]"/>
+    </record>
+    <record id="crm_lead_admin_rule" model="ir.rule">
+        <field name="name">Access Leads Admin</field>
+        <field ref="crm.model_crm_lead" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups"
+               eval="[(4, ref('crm_log.crm_lead_admin_group'))]"/>
+    </record>
+    <record id="crm_stage_quotation_form" model="ir.ui.view">
+    <field name="name">CRM Stage Quotation Form</field>
+    <field name="model">crm.stage</field>
+    <field name="inherit_id" ref="crm.crm_stage_form"/>
+    <field name="arch" type="xml">
+        <!-- “fold” exists for every stage, so it’s a safe anchor -->
+        <xpath expr="//field[@name='fold']" position="after">
+            <field name="is_hide_quotation_button"/>
+        </xpath>
+    </field>
+</record>
+
+</odoo>
