@@ -25,7 +25,7 @@ class DocumentRequest(models.TransientModel):
         column1='request_wizard_id',
         column2='partner_id',
         string='Available Partners',
-        compute='_compute_project_partners',
+        # compute='_compute_project_partners',
         help='Partners available for document request'
     )
     

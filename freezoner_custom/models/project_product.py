@@ -4,45 +4,33 @@ from odoo.exceptions import ValidationError
 
 from odoo import models, fields
 
+
 class ProjectProduct(models.Model):
-    _name = 'project.project.products'
-    _description = 'Project Products'
-    _order = 'project_id, product_id'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _name = "project.project.products"
+    _description = "Project Products"
+    _order = "project_id, product_id"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _access_rights = {
+        "read": ["base.group_user"],
+        "write": ["base.group_user"],
+        "create": ["base.group_user"],
+        "unlink": ["base.group_user"],
+    }
 
     # Basic Fields
-    name = fields.Char(
-        compute='_compute_name',
-        store=True,
-        string='Name'
-    )
-    active = fields.Boolean(
-        default=True,
-        tracking=True
-    )
+    name = fields.Char(compute="_compute_name", store=True, string="Name")
+    active = fields.Boolean(default=True, tracking=True)
 
     # Related Fields
     product_id = fields.Many2one(
-        'product.product',
-        string='Product',
-        required=True,
-        tracking=True,
-        index=True
+        "product.product", string="Product", required=True, tracking=True, index=True
     )
     project_id = fields.Many2one(
-        'project.project',
-        string='Project',
-        required=True,
-        tracking=True,
-        index=True
+        "project.project", string="Project", required=True, tracking=True, index=True
     )
-    # partner_id = fields.Many2one(
-    #     'res.partner',
-    #     related='project_id.partner_id',
-    #     string='Customer',
-    #     store=True,
-    #     tracking=True
-    # )
+    partner_id = fields.Many2one(
+        "res.partner", string="Customer", store=True, tracking=True
+    )
 
     # Date Fields
     # date_start = fields.Date(
@@ -60,13 +48,11 @@ class ProjectProduct(models.Model):
 
     # Related Records
     remarks_ids = fields.Many2many(
-        'project.project.products.remarks',
-        string='Remarks',
-        tracking=True
+        "project.project.products.remarks", string="Remarks", tracking=True
     )
 
     # Computed Methods
-    @api.depends('product_id', 'project_id')
+    @api.depends("product_id", "project_id")
     def _compute_name(self):
         for record in self:
             if record.product_id and record.project_id:
@@ -78,17 +64,17 @@ class ProjectProduct(models.Model):
     def action_add_remarks(self):
         self.ensure_one()
         return {
-            'name': _('Add Remarks'),
-            'type': 'ir.actions.act_window',
-            'view_mode': 'form',
-            'res_model': 'remarks.wizard',
-            'context': {
-                'default_line_id': self.id,
-                'default_project_id': self.project_id.id,
-                'default_product_id': self.product_id.id
+            "name": _("Add Remarks"),
+            "type": "ir.actions.act_window",
+            "view_mode": "form",
+            "res_model": "remarks.wizard",
+            "context": {
+                "default_line_id": self.id,
+                "default_project_id": self.project_id.id,
+                "default_product_id": self.product_id.id,
             },
-            'view_id': self.env.ref('freezoner_custom.remarks_wizard_form_view').id,
-            'target': 'new',
+            "view_id": self.env.ref("freezoner_custom.remarks_wizard_form_view").id,
+            "target": "new",
         }
 
     # CRUD Methods
@@ -96,12 +82,14 @@ class ProjectProduct(models.Model):
     def create(self, vals_list):
         # Validate project and product combinations
         for vals in vals_list:
-            if vals.get('project_id') and vals.get('product_id'):
-                existing = self.search([
-                    ('project_id', '=', vals['project_id']),
-                    ('product_id', '=', vals['product_id']),
-                    ('active', '=', True)
-                ])
+            if vals.get("project_id") and vals.get("product_id"):
+                existing = self.search(
+                    [
+                        ("project_id", "=", vals["project_id"]),
+                        ("product_id", "=", vals["product_id"]),
+                        ("active", "=", True),
+                    ]
+                )
                 # if existing:
                 #     raise ValidationError(_(
                 #         "Product %(product)s is already added to project %(project)s"
@@ -113,16 +101,18 @@ class ProjectProduct(models.Model):
 
     def write(self, vals):
         # Validate project and product combinations
-        if 'project_id' in vals or 'product_id' in vals:
+        if "project_id" in vals or "product_id" in vals:
             for record in self:
-                project_id = vals.get('project_id', record.project_id.id)
-                product_id = vals.get('product_id', record.product_id.id)
-                existing = self.search([
-                    ('project_id', '=', project_id),
-                    ('product_id', '=', product_id),
-                    ('active', '=', True),
-                    ('id', '!=', record.id)
-                ])
+                project_id = vals.get("project_id", record.project_id.id)
+                product_id = vals.get("product_id", record.product_id.id)
+                existing = self.search(
+                    [
+                        ("project_id", "=", project_id),
+                        ("product_id", "=", product_id),
+                        ("active", "=", True),
+                        ("id", "!=", record.id),
+                    ]
+                )
                 # if existing:
                 #     raise ValidationError(_(
                 #         "Product %(product)s is already added to project %(project)s"
@@ -131,3 +121,12 @@ class ProjectProduct(models.Model):
                 #         'project': self.env['project.project'].browse(project_id).name
                 #     })
         return super().write(vals)
+
+    # Ensure partner_id is populated correctly
+    @api.onchange("project_id")
+    def _onchange_project_id(self):
+        for record in self:
+            if record.project_id:
+                record.partner_id = record.project_id.partner_id
+            else:
+                record.partner_id = False
