@@ -115,12 +115,12 @@ class Project(models.Model):
     )
 
     # Partner Relations
-    compliance_shareholder_ids = fields.One2many(
-        'res.partner.shareholder',
-        'project_id',
-        string='Compliance Shareholders',
-        help='Shareholders associated with this project for compliance purposes'
-    )
+    # compliance_shareholder_ids = fields.One2many(
+    #     'res.partner.shareholder',
+    #     'project_id',
+    #     string='Compliance Shareholders',
+    #     help='Shareholders associated with this project for compliance purposes'
+    # )
 
     hand_partner_id = fields.Many2one(
         'res.partner',
@@ -135,7 +135,7 @@ class Project(models.Model):
         column1='project_id',
         column2='partner_id',
         string='Project Partners',
-        compute='_compute_project_partners',
+        # compute='_compute_project_partners',
         store=True,
         help='All partners associated with this project'
     )
