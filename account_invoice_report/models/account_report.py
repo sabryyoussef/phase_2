@@ -4,6 +4,8 @@ from collections import defaultdict
 
 
 class JournalReportCustomHandler(models.AbstractModel):
+    _name = "account.journal.report.handler"
+
     _inherit = "account.journal.report.handler"
 
     def _get_tax_grids_summary(self, options, data):

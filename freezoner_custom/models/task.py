@@ -13,9 +13,9 @@ class Task(models.Model):
     today_date = fields.Datetime(compute="_compute_today_date", store=True)
 
     # # Document Fields
-    # document_ids = fields.Many2many(
-    #     "res.partner.document", compute="_compute_document_ids", store=True
-    # )
+    document_ids = fields.Many2many(
+        "res.partner.document", compute="_compute_document_ids", store=True
+    )
     task_document_ids = fields.One2many(
         "documents.document", "task_ids", string="Task Documents"
     )
