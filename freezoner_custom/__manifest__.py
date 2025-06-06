@@ -13,11 +13,11 @@
         "sale",
         "sale_project",
         "web",
-        # "client_documents",  # Added dependency for Client Documents
+        "client_documents",
         "hr_expense",
         "project",
         "crm",
-        "cabinet_directory",  # Added dependency for Cabinet Directory
+        "cabinet_directory",
     ],
     "data": [
         "security/ir.model.access.csv",

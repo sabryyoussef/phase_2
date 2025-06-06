@@ -1,4 +1,5 @@
 from . import required_document
+from . import document
 from . import compliance
 from . import partner
 from . import models
@@ -6,4 +7,3 @@ from . import country
 from . import business_structure
 from . import config
 from . import onboarding
-from . import document
