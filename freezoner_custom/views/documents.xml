@@ -1,6 +1,6 @@
 <odoo>
     <record id="documents.document_action" model="ir.actions.act_window">
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,list,form</field>
     </record>
     <record id="document_form_view" model="ir.ui.view">
         <field name="name">documents.document.form</field>
@@ -183,7 +183,7 @@
                         <page string="Documents">
                             <field name="document_ids" readonly="1" force_save="1"
                                 options="{'no_open': True,'no_create':True,'no_create_edit':True}">
-                                <tree create="false" edit="false" decoration-info="type == 'empty'"
+                                <list create="false" edit="false" decoration-info="type == 'empty'"
                                     sample="1">
                                     <field name="id" optional="hide" />
                                     <field name="name" string="Document" required="True" />
@@ -194,7 +194,7 @@
                                     <field name="create_date" widget="date" optional="show" />
                                     <field name="activity_exception_decoration"
                                         widget="activity_exception" nolabel="True" />
-                                </tree>
+                                </list>
                             </field>
                         </page>
                         <page string="Document Handover">
