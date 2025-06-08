@@ -138,7 +138,7 @@ class Models(models.Model):
     email = fields.Char(string="Email", related='contact_id.email', readonly=False)
     mobile = fields.Char(string="Mobile", related='contact_id.mobile', readonly=False)
     nationality_id = fields.Many2one(string="Nationality", related='contact_id.nationality_id', readonly=False)
-    birthday = fields.Date(string="Birthday", related='contact_id.birthday', readonly=False)
+    # birthday = fields.Date(string="Birthday", related='contact_id.birthday', readonly=False)
     gender = fields.Selection(string="Gender", selection=[('male', 'Male'), ('female', 'Female'), ],
                               related='contact_id.gender', readonly=False)
     passport = fields.Many2one('documents.document', string='Passport Copy',
