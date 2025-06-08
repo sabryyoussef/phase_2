@@ -13,7 +13,6 @@ class Partner(models.Model):
         string="Stage",
         index=True,
         tracking=True,
-        default=_get_default_stage,
         copy=False,
     )
     is_appear_buttons = fields.Boolean(string="Show Stage Buttons", default=True)
