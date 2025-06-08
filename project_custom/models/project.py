@@ -86,8 +86,8 @@ class Project(models.Model):
     shareholding_total = fields.Float(compute='get_shareholding_total')
     preferred_mobile_number = fields.Char('Preferred Mobile Number', related='hand_partner_id.mobile', readonly=False)
     channel_plan_id = fields.Many2one('channel.partner.plan',string="Channel Partner Plan", related='hand_partner_id.channel_plan_id', readonly=False)
-    mobile_country_id = fields.Many2one('res.country', string="Mobile Country",
-                                        related='hand_partner_id.mobile_country_id', readonly=False)
+    # mobile_country_id = fields.Many2one('res.country', string="Mobile Country",
+    #                                     related='hand_partner_id.mobile_country_id', readonly=False)
     is_visa_application = fields.Boolean('Is Visa Application', copy=False)
     project_visa_application_ids = fields.One2many('project.visa.application', 'project_id', string='Visa Application',readonly=False)
     is_complete_return_hand = fields.Boolean(string='Handover Complete', copy=False)
