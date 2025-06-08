@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Partner Stages -->
+        <record id="stage_draft" model="partner.stage">
+            <field name="name">Draft</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="stage_verified" model="partner.stage">
+            <field name="name">Verified</field>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="stage_inactive" model="partner.stage">
+            <field name="name">Inactive</field>
+            <field name="sequence">3</field>
+        </record>
+    </data>
+</odoo>
