@@ -55,7 +55,7 @@ class Project(models.Model):
                                                   related='hand_partner_id.nationality_id', readonly=False)
     hand_partner_place_of_birth = fields.Many2one('res.country', string='PLace Of Birth',
                                                   related='hand_partner_id.place_of_birth', readonly=False)
-    hand_partner_birthday = fields.Date(string='Birthday', related='hand_partner_id.birthday', readonly=False)
+    # hand_partner_birthday = fields.Date(string='Birthday', related='hand_partner_id.birthday', readonly=False)
     price_per_share = fields.Float('Price Per Share', related='hand_partner_id.price_per_share', readonly=False)
     total_number_shares = fields.Float('Total Number Of Shares', related='hand_partner_id.total_number_shares',
                                        readonly=False)
