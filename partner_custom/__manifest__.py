@@ -5,8 +5,8 @@
     "data": [
         "security/ir.model.access.csv",
         "security/security.xml",
-        "views/partner.xml",
         "data/partner_stage_data.xml",
+        "views/partner.xml",
         'views/stages.xml',
     ],
     "installable": True,
