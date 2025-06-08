@@ -78,6 +78,7 @@ class CrmLead(models.Model):
     is_hide_quotation_button = fields.Boolean(
         string='Hide “New Quotation” Button'
     )
+    compliance_name = fields.Char(string='Compliance Name')
 
     def action_view_document(self):
         recs = self.business_proposal

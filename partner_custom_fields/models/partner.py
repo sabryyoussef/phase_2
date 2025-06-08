@@ -1,4 +1,3 @@
-
 from odoo import api, fields, models
 
 class Partner(models.Model):
@@ -8,3 +7,4 @@ class Partner(models.Model):
     secondary_support_id = fields.Many2one('hr.employee', string='Secondary Support')
     accountant1_id = fields.Many2one('hr.employee', string='Accountant 1')
     accountant2_id = fields.Many2one('hr.employee', string='Accountant 2')
+    business_structure_id = fields.Many2one('business.structure', string='Business Structure')

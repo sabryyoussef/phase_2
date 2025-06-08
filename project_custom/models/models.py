@@ -130,9 +130,9 @@ class Models(models.Model):
 
     company_type = fields.Selection(string="Contact Type", related='contact_id.company_type', readonly=False)
     customer_id = fields.Many2one('res.partner', string='Customer')
-    first_name = fields.Char(string="First Name", related='contact_id.first_name', readonly=False)
-    middle_name = fields.Char(string="Middle Name", related='contact_id.middle_name', readonly=False)
-    last_name = fields.Char(string="Last Name", related='contact_id.last_name', readonly=False)
+    # first_name = fields.Char(string="First Name", related='contact_id.first_name', readonly=False)
+    # middle_name = fields.Char(string="Middle Name", related='contact_id.middle_name', readonly=False)
+    # last_name = fields.Char(string="Last Name", related='contact_id.last_name', readonly=False)
     place_of_birth = fields.Many2one('res.country', string="PLace Of Birth", related='contact_id.place_of_birth',
                                      readonly=False)
     email = fields.Char(string="Email", related='contact_id.email', readonly=False)
