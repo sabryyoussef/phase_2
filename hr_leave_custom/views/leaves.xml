@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_leave_backup" model="ir.ui.view">
+        <field name="name">hr.leave.backup</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">0</attribute>
+            </xpath>
+            <xpath expr="//sheet" position="after">
+                <footer>
+                    <field name="is_submitted" invisible="1" />
+                    <button name="action_submit" type="object" string="Save" class="oe_highlight"
+                        modifiers="{'invisible':[('is_submitted','=',True)]}" />
+                    <button special="cancel" string="Close" close="1" />
+                </footer>
+            </xpath>
+            <xpath expr="//button[@name='action_approve']" position="replace">
+                <button string="Approve" name="action_approve" type="object" class="oe_highlight"
+                    modifiers="{'invisible': ['|', '|', '|', '|', ('id', '=', False), ('active', '=', False), ('can_approve', '=', False), ('state', '!=', 'confirm'), ('is_submitted', '=', False)]}" />
+            </xpath>
+            <xpath expr="//button[@name='action_refuse']" position="replace">
+                <button string="Refuse" name="action_refuse" type="object"
+                    modifiers="{'invisible': ['|', '|', '|', '|', ('id', '=', False), ('active', '=', False), ('can_approve', '=', False), ('state', 'not in', ('confirm','validate1','validate')), ('is_submitted', '=', False)]}" />
+            </xpath>
+            <xpath expr="//button[@name='action_reset_confirm']" position="replace">
+                <button string="Mark as Draft" name="action_reset_confirm" type="object"
+                    modifiers="{'invisible': ['|', '|', '|', ('id', '=', False), ('can_reset', '=', False), ('state', 'not in', ['cancel', 'refuse']), ('is_submitted', '=', False)]}" />
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="backup_employee_id" />
+                <!--                       modifiers="{'invisible': [('is_backup_employee', '=', False)],'required':
+                [('is_backup_employee', '=', True)]}"/>-->
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_leave_view_tree" model="ir.ui.view">
+        <field name="name">hr.leave.tree</field>
+        <field name="model">hr.leave</field>
+        <field name="arch" type="xml">
+            <list string="Time Off" decoration-info="state == 'confirm'"
+                decoration-success="state == 'validate'" decoration-muted="state == 'refuse'">
+                <field name="employee_id" />
+                <field name="holiday_status_id" />
+                <field name="date_from" />
+                <field name="date_to" />
+                <field name="number_of_days" />
+                <field name="state" />
+            </list>
+        </field>
+    </record>
+
+    <record id="hr_leave_view_tree_my" model="ir.ui.view">
+        <field name="name">hr.leave</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree_my" />
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="create">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
