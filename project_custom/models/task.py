@@ -1,11 +1,11 @@
-
 from odoo import api, fields, models
 
-class Tasks(models.Model):
-    _inherit = 'project.task'
 
-    all_milestone_id = fields.Many2one('project.milestone','Milestone')
-    checkpoint_ids = fields.One2many('project.task.checkpoint','task_id')
+class Tasks(models.Model):
+    _inherit = "project.task"
+
+    all_milestone_id = fields.Many2one("project.milestone", "Milestone")
+    checkpoint_ids = fields.One2many("project.task.checkpoint", "task_id")
 
     def action_send_email(self):
         if self.milestone_id and self.milestone_id.mail_template_id:
@@ -20,19 +20,33 @@ class Tasks(models.Model):
         else:
             print("Email template not found for milestone:", self.milestone_id)
 
-
-    @api.onchange('milestone_id','all_milestone_id')
+    @api.onchange("milestone_id", "all_milestone_id")
     def _milestone_id(self):
         for task in self:
             if task.all_milestone_id:
                 task.milestone_id = task.all_milestone_id.id
-                existing_milestone = self.env['project.milestone'].sudo().search([
-                    ('project_id', '=', task.project_id.id),
-                    ('name', '=', task.name)
-                ], limit=1)
+                existing_milestone = (
+                    self.env["project.milestone"]
+                    .sudo()
+                    .search(
+                        [
+                            ("project_id", "=", task.project_id.id),
+                            ("name", "=", task.name),
+                        ],
+                        limit=1,
+                    )
+                )
                 if not existing_milestone:
                     task.sudo().milestone_id.project_id = task.project_id.id
                     task.sudo().milestone_id.task_ids = [task.id]
 
-
-
+    @api.model
+    def _read_group_stage_ids(self, stages, domain, order):
+        search_domain = [("id", "in", stages.ids)]
+        if "default_project_id" in self.env.context:
+            search_domain = [
+                "|",
+                ("project_ids", "=", self.env.context["default_project_id"]),
+            ] + search_domain
+        stage_ids = stages._search(search_domain, order=order)
+        return stages.browse(stage_ids)

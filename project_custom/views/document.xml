@@ -8,7 +8,7 @@
                 <field name="type_is_closed" invisible="1"/>
             </xpath>
             <xpath expr="//field[@name='type_id']" position="attributes">
-                <attribute name="attrs">{'readonly':[('type_is_closed','=',True)]}</attribute>
+                <attribute name="modifiers">{'readonly':[('type_is_closed','=',True)]}</attribute>
             </xpath>
         </field>
     </record>

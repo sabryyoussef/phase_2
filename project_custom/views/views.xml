@@ -16,9 +16,9 @@
         <field name="name">reached.checkpoint.tree</field>
         <field name="model">reached.checkpoint</field>
         <field name="arch" type="xml">
-            <tree string="">
+            <list string="">
                 <field name="name"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record id="reached_checkpoint_search" model="ir.ui.view">
@@ -36,17 +36,17 @@
         <field name="name">Legal Type Tree</field>
         <field name="model">hand.legal.type</field>
         <field name="arch" type="xml">
-            <tree editable="bottom">
+            <list editable="bottom">
                 <field name="name"/>
                 <field name="license_authority_ids" widget="many2many_tags"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record id="hand_legal_type_action" model="ir.actions.act_window">
         <field name="name">Legal Type</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">hand.legal.type</field>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">list</field>
     </record>
     <menuitem id="hand_legal_type_menu" name="Legal Type"
               parent="contacts.res_partner_menu_config"
