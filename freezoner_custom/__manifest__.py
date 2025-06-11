@@ -36,7 +36,7 @@
         # "views/document.xml",
         "views/account_move.xml",
         "views/expense.xml",
-        # "views/product.xml",
+        "views/product.xml",
         "views/project.xml",
         "views/task.xml",
         "views/crm.xml",
