@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+
 ###################################################################################
 #
 #    Copyright (C) 2020 Cetmix OÜ
@@ -24,16 +27,16 @@ class MailThread(models.AbstractModel):
     _inherit = "mail.thread"
 
     def _notify_get_reply_to_formatted_email(
-        self, record_email, record_name, company=False
+        self, record_email, record_name, company=None
     ):
         """Custom prepare reply to email by company configuration"""
-        company = company or self.env["res.company"].get_active_company()
-        if not company.add_sender_reply_to:
+        company = company or self.env.company
+        if not getattr(company, "add_sender_reply_to", False):
             return super()._notify_get_reply_to_formatted_email(
                 record_email, record_name, company=company
             )
         company_name = [self.env.user.name, company.name]
-        if company.email_joint:
+        if getattr(company, "email_joint", False):
             company_name.insert(1, company.email_joint)
         name = " ".join((" ".join(company_name), record_name)).rstrip()
         return tools.formataddr((name, record_email))
