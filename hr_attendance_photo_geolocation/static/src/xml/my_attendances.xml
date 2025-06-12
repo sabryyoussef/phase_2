@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="hr_attendance_photo_geolocation.CheckInOut" t-inherit="hr_attendance.CheckInOut" t-inherit-mode="extension">
+        <xpath expr="//button[hasclass('o_hr_attendance_sign_in_out_icon')]" position="after">
+            <div t-if="state.isLocationEnabled and state.isLocationDisplayed" class="glocation_kisok_container mt-3">
+                <div class="d-flex align-items-center justify-content-center">
+                    <i class="fa fa-map-marker me-2" />
+                    <button type="button" class="btn btn-sm btn-outline-secondary" t-on-click="toggleLocationDisplay">
+                        <i t-attf-class="fa {{state.isLocationDisplayed ? 'fa-angle-double-up' : 'fa-angle-double-down'}}" />
+                    </button>
+                </div>
+                <div t-if="state.isLocationDisplayed" class="glocation_kisok_view mt-2 text-center">
+                    <small class="text-muted">
+                        <t t-if="state.latitude and state.longitude">
+                            Latitude: <span t-esc="state.latitude.toFixed(6)"/>, 
+                            Longitude: <span t-esc="state.longitude.toFixed(6)"/>
+                        </t>
+                        <t t-else="">
+                            Location not available
+                        </t>
+                    </small>
+                </div>
+            </div>
+        </xpath>
+    </t>
+
+</templates> 
