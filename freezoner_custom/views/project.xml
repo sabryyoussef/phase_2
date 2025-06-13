@@ -3,7 +3,7 @@
     <record id="act_project_project_3_project_task_all" model="ir.actions.act_window">
         <field name="name">Tasks</field>
         <field name="res_model">project.task</field>
-        <field name="view_mode">kanban,tree,form,calendar,pivot,graph,activity</field>
+        <field name="view_mode">kanban,list,form,calendar,pivot,graph,activity</field>
         <field name="domain">[('display_project_id', '=', active_id),('user_ids', 'in', uid)]</field>
         <field name="context">{'default_project_id': active_id, 'show_project_update': True}</field>
         <field name="search_view_id" ref="project.view_task_search_form"/>
@@ -58,20 +58,21 @@
         <field name="inherit_id" ref="project.edit_project"/>
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
-<!--                <button name="create_documents" type="object" string="Create Documents" modifiers="{'invisible': true}"/>-->
-<!--                <button name="action_done_project" type="object"-->
-<!--                        string="Project Done"-->
-<!--                        groups="freezoner_custom.project_done_button_group"-->
-<!--                        modifiers="{'invisible': [('state', 'not in', ['c_in_progress','b_new'])]}"-->
-<!--                        class="oe_highlight"/>-->
+                <button name="create_documents" type="object" string="Create Documents" modifiers="{'invisible': true}"/>
+                <button name="action_done_project" type="object"
+                        string="Project Done"
+                        groups="freezoner_custom.project_done_button_group"
+                        modifiers="{'invisible': [('state', 'not in', ['c_in_progress','b_new'])]}"
+                        class="oe_highlight"/>
                 <field name="is_current_user_project_manager" modifiers="{'invisible': true}"/>
                 <field name="is_current_user_project_admin" modifiers="{'invisible': true}"/>
-<!--                <field name="is_project_template" modifiers="{'invisible': true}"/>-->
-<!--                <button name="action_template" groups="freezoner_custom.template_project_button_group" type="object"-->
-<!--                        string="Go To Template" states="b_new,c_in_progress,d_done,on_hold,e_cancel"-->
-<!--                        class="oe_highlight"/>-->
-<!--                <button name="action_new" type="object"-->
-<!--                        string="Go To New Projects" states="a_template" class="oe_highlight"/>-->
+                <field name="is_project_template" modifiers="{'invisible': true}"/>
+                <button name="action_template" groups="freezoner_custom.template_project_button_group" type="object"
+                        string="Go To Template" options="b_new,c_in_progress,d_done,on_hold,e_cancel"
+                        class="oe_highlight"/>
+                <button name="action_new" type="object"
+                        string="Go To New Projects" options="a_template" class="oe_highlight"/>
+                <button name="%(project.project_share_wizard_action)d" type="action" string="Share Project" class="oe_highlight"/>
             </xpath>
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="is_check_current_user" modifiers="{'invisible': true}"/>
@@ -79,7 +80,6 @@
                 <field name="is_current_user_project_manager" modifiers="{'invisible': true}"/>
                 <field name="is_current_user_project_admin" modifiers="{'invisible': true}"/>
             </xpath>
-            <!--
             <xpath expr="//page[@name='description']" position="replace">
                 <page name="tasks" string="Tasks">
                     <field name="filtered_task_ids">
@@ -310,7 +310,7 @@
                 <field name="state" widget="statusbar"
                        statusbar_visible="b_new,c_in_progress,d_done,on_hold,e_cancel"/>
             </xpath>
-            <!-
+            <!--
             <xpath expr="//button[@name='%(project.project_share_wizard_action)d']" position="replace"/>
             -->
         </field>
@@ -344,7 +344,6 @@
     </record>
 
     <!-- Actions and Menus for Project Views -->
-    <!--
     <record id="project.open_view_project_all_group_stage" model="ir.actions.act_window">
         <field name="domain">[('state', '!=','a_template'),('user_id', '=', uid)]</field>
     </record>
@@ -356,7 +355,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">project.project</field>
         <field name="context">{'default_allow_billable': True, 'search_default_groupby_stage': 1}</field>
-        <field name="view_mode">kanban,tree,form,gantt,calendar,activity</field>
+        <field name="view_mode">kanban,list,form,gantt,calendar,activity</field>
     </record>
     <menuitem id="all_project_menu" name="All Projects" parent="project.menu_main_pm"
               groups="freezoner_custom.template_project_button_group"
@@ -366,7 +365,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">project.project</field>
         <field name="context">{'default_allow_billable': True, 'search_default_groupby_stage': 1}</field>
-        <field name="view_mode">kanban,tree,form,gantt,calendar,activity</field>
+        <field name="view_mode">kanban,list,form,gantt,calendar,activity</field>
         <field name="domain">[('tasks.user_ids', 'in', [uid])]</field>
     </record>
     <menuitem id="my_project_menu" name=" My Project Tasks" parent="project.menu_main_pm"
@@ -377,7 +376,7 @@
         <field name="res_model">project.project</field>
         <field name="domain">[('user_id.sale_team_id', '=', 1)]</field>
         <field name="context">{'default_allow_billable': True, 'search_default_groupby_stage': 1}</field>
-        <field name="view_mode">kanban,tree,form,gantt,calendar,activity</field>
+        <field name="view_mode">kanban,list,form,gantt,calendar,activity</field>
     </record>
     <menuitem id="all_sales_project_menu" name="Sales Projects"
               parent="project.menu_project_report"
@@ -388,7 +387,7 @@
         <field name="res_model">project.project</field>
         <field name="domain">[('user_id.sale_team_id', '=', 7)]</field>
         <field name="context">{'default_allow_billable': True, 'search_default_groupby_stage': 1}</field>
-        <field name="view_mode">kanban,tree,form,gantt,calendar,activity</field>
+        <field name="view_mode">kanban,list,form,gantt,calendar,activity</field>
     </record>
     <menuitem id="all_operations_project_menu" name="Operations Projects"
               parent="project.menu_project_report"
@@ -399,7 +398,7 @@
         <field name="res_model">project.project</field>
         <field name="domain">[('user_id.sale_team_id', '=', 6)]</field>
         <field name="context">{'default_allow_billable': True, 'search_default_groupby_stage': 1}</field>
-        <field name="view_mode">kanban,tree,form,gantt,calendar,activity</field>
+        <field name="view_mode">kanban,list,form,gantt,calendar,activity</field>
     </record>
     <menuitem id="all_accounts_project_menu" name="Accounts Projects"
               parent="project.menu_project_report"
@@ -408,10 +407,9 @@
         <field name="name">All Tasks</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">project.task</field>
-        <field name="view_mode">kanban,tree,form,gantt,calendar,map,pivot,graph,activity</field>
+        <field name="view_mode">kanban,list,form,gantt,calendar,map,pivot,graph,activity</field>
     </record>
     <menuitem id="all_tasks_menu" name="All Tasks" parent="project.menu_main_pm"
               groups="freezoner_custom.template_project_button_group"
               action="all_tasks_action" sequence="7"/>
-    -->
 </odoo>
