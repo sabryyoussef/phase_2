@@ -58,11 +58,9 @@
                 <field name="rating_last_text" string="Rating" decoration-danger="rating_last_text == 'ko'"
                        decoration-warning="rating_last_text == 'ok'" decoration-success="rating_last_text == 'top'"
                        class="fw-bold" widget="badge" optional="hide" groups="project.group_project_rating"/>
-<!--                <field name="legend_normal" invisible="1"/>-->
-<!--                <field name="legend_done" invisible="1"/>-->
-<!--                <field name="legend_blocked" invisible="1"/>-->
-<!--                <field name="kanban_state" widget="state_selection" optional="show" options="{'hide_label': True}"-->
-<!--                       nolabel="1" required="0"/>-->
+                <field name="legend_normal" invisible="1"/>
+                <field name="legend_done" invisible="1"/>
+                <field name="legend_blocked" invisible="1"/>
                 <field name="stage_id" invisible="context.get('set_visible',False)" optional="show"
                        readonly="not context.get('default_project_id')"/>
                 <field name="recurrence_id" invisible="1"/>
