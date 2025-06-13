@@ -7,6 +7,7 @@ requests
 pillow
 psycopg2-binary
 babel
+geopy>=2.3.0  # Added for hr_attendance_ip_mac module
 
 # Optional but recommended
 phonenumbers
