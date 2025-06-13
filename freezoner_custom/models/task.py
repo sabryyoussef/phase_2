@@ -11,6 +11,9 @@ class Task(models.Model):
     is_done = fields.Boolean(related="stage_id.is_done", store=True)
     is_subtask = fields.Boolean(copy=False)
     today_date = fields.Datetime(compute="_compute_today_date", store=True)
+    legend_normal = fields.Char(string='Kanban Legend: Normal')
+    legend_done = fields.Char(string='Kanban Legend: Done')
+    legend_blocked = fields.Char(string='Kanban Legend: Blocked')
 
     # # Document Fields
     document_ids = fields.Many2many(
