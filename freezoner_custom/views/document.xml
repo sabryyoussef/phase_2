@@ -6,8 +6,8 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="before">
                 <header>
-<!--                     <button name="move_task_stage" type="object" string="Move Task To Done"/>
-                </header> -->
+                    <button name="move_task_stage" type="object" string="Move Task To Done"/>
+                </header>
             </xpath>
         </field>
     </record>
