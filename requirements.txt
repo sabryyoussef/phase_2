@@ -1,0 +1,15 @@
+# Core dependencies
+stripe>=2.27.0
+python-dateutil
+pytz
+werkzeug
+requests
+pillow
+psycopg2-binary
+babel
+
+# Optional but recommended
+phonenumbers
+num2words
+pdf2image
+python-stdnum
