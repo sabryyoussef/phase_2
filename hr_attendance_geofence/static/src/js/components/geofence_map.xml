@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="hr_attendance_geofence.MapToggleTemplate" owl="1">
+        <div class="gmap_kisok_container mb8" id="gmap_kisok">
+            <i class="fa fa-1x fa-angle-double-down gmap_kisok_toggle"
+               role="button"
+               t-on-click="toggleMap">
+                Map Location
+            </i>
+            <div t-if="state.showMap" class="gmap_kisok_view"></div>
+        </div>
+    </t>
+</templates> 

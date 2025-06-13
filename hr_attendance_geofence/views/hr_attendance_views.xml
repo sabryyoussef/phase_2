@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_attendance_view_form" model="ir.ui.view">
+        <field name="name">hr.attendance.form</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group" position="after">
+                <group name="check_in_location" string="Check-in Location">
+                    <group>
+                        <field name="check_in_latitude" nolabel="0" />
+                        <field name="check_in_longitude" nolabel="0" />
+                        <field name="check_in_geofence_ids" nolabel="0"
+                            widget="many2many_tags" options="{'no_create': True}" readonly="1" />
+                    </group>
+                </group>
+                <group name="check_out_location" string="Check-out Location">
+                    <group>
+                        <field name="check_out_latitude" nolabel="0" />
+                        <field name="check_out_longitude" nolabel="0" />
+                        <field name="check_out_geofence_ids" nolabel="0"
+                            widget="many2many_tags" options="{'no_create': True}" readonly="1" />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Delete existing client action if it exists -->
+    <delete model="ir.actions.client"
+        search="[('id', '=', ref('action_hr_attendance_geofence_client'))]" />
+
+    <!-- Client Action View for Attendance Geofence -->
+    <record id="action_hr_attendance_geofence_client" model="ir.actions.client">
+        <field name="name">Attendance Geofence</field>
+        <field name="tag">attendance_geofence</field>
+        <field name="target">main</field>
+        <field name="type">ir.actions.client</field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_hr_attendance_geofence"
+        name="Geofence"
+        parent="hr_attendance.menu_hr_attendance_root"
+        action="action_hr_attendance_geofence_client"
+        sequence="30" />
+
+</odoo>

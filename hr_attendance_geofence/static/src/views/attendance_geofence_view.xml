@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="hr_attendance_geofence.AttendanceGeofenceView" owl="1">
+        <div class="o_attendance_geofence_client_action h-100 d-flex flex-column">
+            <div class="o_content d-flex flex-column align-items-center justify-content-center flex-grow-1">
+                <div class="o_attendance_geofence_card card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title mb-4">Attendance Geofence</h3>
+                        <div t-if="state.error" class="alert alert-danger mb-3" role="alert">
+                            <t t-esc="state.error.message || 'An error occurred'"/>
+                        </div>
+                        <button class="btn btn-primary btn-lg" 
+                                t-on-click="onGeofenceClick"
+                                t-att-disabled="state.isLoading">
+                            <i t-if="state.isLoading" class="fa fa-spinner fa-spin me-2"/>
+                            <span>Check In/Out</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates> 
