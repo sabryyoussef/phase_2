@@ -71,7 +71,7 @@ class Project(models.Model):
         tracking=True,
         copy=False,
         readonly=True,
-        group_expand="_expand_states",
+        group_expand="_group_expand_states",
         compute="_compute_project_state",
         store=True,
         help="Current status of the project",
@@ -293,7 +293,7 @@ class Project(models.Model):
                     project.state = "b_new"
 
     @api.model
-    def _expand_states(self, states, domain, order):
+    def _group_expand_states(self, states, domain, order=None):
         return ["a_template", "b_new", "c_in_progress", "d_done", "on_hold", "e_cancel"]
 
     @api.depends("compliance_shareholder_ids", "partner_id", "hand_partner_id")
@@ -607,6 +607,58 @@ class Project(models.Model):
     def _compute_sale_order_id(self):
         for rec in self:
             rec.sale_order_id = rec.sale_id
+
+    def action_complete_required(self):
+        """Placeholder for action_complete_required button action. Customize as needed."""
+        raise UserError(_("The action_complete_required action is not yet implemented."))
+
+    def action_confirm_required(self):
+        """Placeholder for action_confirm_required button action. Customize as needed."""
+        raise UserError(_("The action_confirm_required action is not yet implemented."))
+
+    def action_repeat_required(self):
+        """Placeholder for action_repeat_required button action. Customize as needed."""
+        raise UserError(_("The action_repeat_required action is not yet implemented."))
+
+    def action_return_required(self):
+        """Placeholder for action_return_required button action. Customize as needed."""
+        raise UserError(_("The action_return_required action is not yet implemented."))
+
+    def action_update_required(self):
+        """Placeholder for action_update_required button action. Customize as needed."""
+        raise UserError(_("The action_update_required action is not yet implemented."))
+
+    def action_complete_deliverable(self):
+        """Placeholder for action_complete_deliverable button action. Customize as needed."""
+        raise UserError(_("The action_complete_deliverable action is not yet implemented."))
+
+    def action_confirm_deliverable(self):
+        """Placeholder for action_confirm_deliverable button action. Customize as needed."""
+        raise UserError(_("The action_confirm_deliverable action is not yet implemented."))
+
+    def action_repeat_deliverable(self):
+        """Placeholder for action_repeat_deliverable button action. Customize as needed."""
+        raise UserError(_("The action_repeat_deliverable action is not yet implemented."))
+
+    def action_return_deliverable(self):
+        """Placeholder for action_return_deliverable button action. Customize as needed."""
+        raise UserError(_("The action_return_deliverable action is not yet implemented."))
+
+    def action_update_deliverable(self):
+        """Placeholder for action_update_deliverable button action. Customize as needed."""
+        raise UserError(_("The action_update_deliverable action is not yet implemented."))
+
+    def action_repeat_partner_fields(self):
+        """Placeholder for action_repeat_partner_fields button action. Customize as needed."""
+        raise UserError(_("The action_repeat_partner_fields action is not yet implemented."))
+
+    def create_documents(self):
+        """Placeholder for create_documents button action. Customize as needed."""
+        raise UserError(_("The create_documents action is not yet implemented."))
+
+    def action_done_project(self):
+        """Placeholder for action_done_project button action. Customize as needed."""
+        raise UserError(_("The action_done_project action is not yet implemented."))
 
 
 class StageTask(models.Model):

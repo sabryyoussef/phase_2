@@ -320,6 +320,14 @@ class Task(models.Model):
             "target": "new",
         }
 
+    def move_stage(self):
+        """Placeholder for move_stage button action. Customize as needed."""
+        raise UserError(_("The move_stage action is not yet implemented."))
+
+    def action_view_task(self):
+        """Placeholder for action_view_task button action. Customize as needed."""
+        raise UserError(_("The action_view_task action is not yet implemented."))
+
     # Helper Methods
     def _get_default_stage_id(self):
         project_id = self.env.context.get("default_project_id")
