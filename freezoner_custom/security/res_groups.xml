@@ -7,5 +7,10 @@
         <record id="confirm_proforma_invoice" model="res.groups">
             <field name="name">Allow Confirm Pro-forma Invoice</field>
         </record>
+
+        <record id="template_project_button_group" model="res.groups">
+            <field name="name">Template Project Button Group</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
     </data>
 </odoo> 
