@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ks_curved_backend_theme_enter.KsGenericDropdownMenu" owl="1">
+        <div class="dropdown" t-ref="dropdown">
+            <button class="btn dropdown-toggle" 
+                    type="button" 
+                    t-on-click="toggle"
+                    t-on-keydown="_onButtonKeydown"
+                    t-att-aria-expanded="state.open">
+                <i t-if="icon" t-attf-class="fa {{icon}}"/>
+                <span t-if="title" t-esc="title"/>
+                <i t-if="displayCaret" class="fa fa-caret-down"/>
+                <i t-elif="displayChevron" class="fa fa-chevron-down"/>
+            </button>
+            <div t-attf-class="dropdown-menu {{state.open ? 'show' : ''}}"
+                 t-att-aria-labelledby="title">
+                <t t-foreach="items" t-as="item" t-key="item_index">
+                    <DropdownItem t-props="item" t-on-item-selected="_onItemSelected"/>
+                </t>
+                <t t-if="props.slots and props.slots.default">
+                    <t t-slot="default"/>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates> 
