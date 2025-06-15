@@ -318,6 +318,19 @@ class Task(models.Model):
             "target": "new",
         }
 
+    def action_view_task(self):
+        """Action to view the current task in form view"""
+        self.ensure_one()
+        return {
+            "name": self.name,
+            "type": "ir.actions.act_window",
+            "view_mode": "form",
+            "res_model": "project.task",
+            "res_id": self.id,
+            "target": "current",
+            "view_id": self.env.ref("project.view_task_form2").id,
+        }
+
     # Helper Methods
     def _get_default_stage_id(self):
         project_id = self.env.context.get("default_project_id")
