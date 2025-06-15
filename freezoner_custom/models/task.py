@@ -17,9 +17,9 @@ class Task(models.Model):
     task_document_ids = fields.One2many(
         "documents.document", "task_ids", string="Task Documents"
     )
-    # document_count = fields.Integer(
-    #     compute="_compute_document_count", string="Document Count", store=True
-    # )
+    document_count = fields.Integer(
+        compute="_compute_document_count", string="Document Count", store=True
+    )
     document_type_ids = fields.One2many(
         "task.document.lines", "task_ids", string="Document Types"
     )
@@ -89,21 +89,7 @@ class Task(models.Model):
 
     def _compute_document_count(self):
         for task in self:
-            documents = (
-                self.env["res.partner.document"]
-                .sudo()
-                .search(
-                    [
-                        "|",
-                        ("project_id", "=", task.project_id.id),
-                        (
-                            "task_ids",
-                            "in",
-                            [task.id],  # Ensure task.id is wrapped in a list
-                        ),
-                    ]
-                )
-            )
+            documents = self.env["res.partner.document"]
 
             # Add documents from required types
             for line in task.document_required_type_ids:
@@ -249,17 +235,7 @@ class Task(models.Model):
 
     def action_view_document(self):
         self.ensure_one()
-        documents = (
-            self.env["res.partner.document"]
-            .sudo()
-            .search(
-                [
-                    "|",
-                    ("project_id", "=", self.project_id.id),
-                    ("task_ids", "in", self.id),
-                ]
-            )
-        )
+        documents = self.env["res.partner.document"]
 
         # Add documents from required types
         for line in self.document_required_type_ids:
