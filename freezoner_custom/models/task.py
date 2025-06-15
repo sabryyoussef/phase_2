@@ -1,7 +1,5 @@
-from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError, UserError
-from datetime import datetime, timedelta
-from collections import defaultdict
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class Task(models.Model):
@@ -11,9 +9,6 @@ class Task(models.Model):
     is_done = fields.Boolean(related="stage_id.is_done", store=True)
     is_subtask = fields.Boolean(copy=False)
     today_date = fields.Datetime(compute="_compute_today_date", store=True)
-    legend_normal = fields.Char(string='Kanban Legend: Normal')
-    legend_done = fields.Char(string='Kanban Legend: Done')
-    legend_blocked = fields.Char(string='Kanban Legend: Blocked')
 
     # # Document Fields
     document_ids = fields.Many2many(
@@ -215,7 +210,7 @@ class Task(models.Model):
                 raise ValidationError(_("Stage is first!"))
 
             previous_stage = stages.sorted(key=lambda s: s.sequence).filtered(
-                lambda s: s.sequence < currentStage.sequence
+                lambda s: s.sequence < current_stage.sequence
             )
 
             if previous_stage:
@@ -323,14 +318,6 @@ class Task(models.Model):
             "target": "new",
         }
 
-    def move_stage(self):
-        """Placeholder for move_stage button action. Customize as needed."""
-        raise UserError(_("The move_stage action is not yet implemented."))
-
-    def action_view_task(self):
-        """Placeholder for action_view_task button action. Customize as needed."""
-        raise UserError(_("The action_view_task action is not yet implemented."))
-
     # Helper Methods
     def _get_default_stage_id(self):
         project_id = self.env.context.get("default_project_id")
@@ -338,7 +325,7 @@ class Task(models.Model):
             return False
         return self.stage_find(project_id, [("fold", "=", False)])
 
-    def _read_group_stage_ids(self, stages, domain, order):
+    def _read_group_stage_ids(self, stages, domain):
         project_id = self.env.context.get("default_project_id")
         if project_id:
             return stages.filtered(lambda s: project_id in s.project_ids)
