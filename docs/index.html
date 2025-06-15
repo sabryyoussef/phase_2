@@ -5,31 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Freezoner Custom Views Documentation</title>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 1200px; margin: 0 auto; padding: 20px; color: #333; }
-        h1, h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .module-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
-        .module-card { background-color: #f8f9fa; padding: 20px; border-radius: 5px; border-left: 4px solid #007bff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s; }
-        .module-card:hover { transform: translateY(-5px); }
-        .module-card h3 { color: #2c3e50; margin-top: 0; }
-        .module-card p { color: #666; margin-bottom: 15px; }
-        .module-card a { display: inline-block; padding: 8px 16px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px; transition: background-color 0.2s; }
-        .module-card a:hover { background-color: #0056b3; }
-        .status { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.9em; margin-left: 10px; }
-        .status.pending { background-color: #ffd700; color: #000; }
-        .status.completed { background-color: #28a745; color: #fff; }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .module-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .module-card {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .module-card:hover {
+            transform: translateY(-5px);
+        }
+        .module-card h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .module-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .module-card a {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        .module-card a:hover {
+            background-color: #0056b3;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .status.pending {
+            background-color: #ffd700;
+            color: #000;
+        }
+        .status.completed {
+            background-color: #28a745;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
     <h1>Freezoner Custom Views Documentation</h1>
-    <!-- GitHub Badges Start -->
-    <p>
-        <img src="https://img.shields.io/github/v/release/your-org/freezoner_custom?style=flat-square" alt="GitHub release">
-        <img src="https://img.shields.io/github/license/your-org/freezoner_custom?style=flat-square" alt="License">
-        <img src="https://img.shields.io/github/issues/your-org/freezoner_custom?style=flat-square" alt="Issues">
-        <img src="https://img.shields.io/github/stars/your-org/freezoner_custom?style=flat-square" alt="GitHub stars">
-    </p>
-    <!-- GitHub Badges End -->
+
     <p>This documentation covers all customizations made to Odoo views in the Freezoner module. Each view has been enhanced with additional features and improved workflows to better serve specific business needs.</p>
+
     <div class="module-list">
         <!-- Account Move View -->
         <div class="module-card">
@@ -37,12 +84,14 @@
             <p>Enhanced payment method tracking and status visualization for journal entries and invoices.</p>
             <a href="account_move.html">View Documentation</a>
         </div>
+
         <!-- Task View -->
         <div class="module-card">
             <h3>Task View <span class="status completed">Completed</span></h3>
             <p>Customized task management with document handling and enhanced project integration.</p>
             <a href="task.html">View Documentation</a>
         </div>
+
         <!-- Project View -->
         <div class="module-card">
             <h3>Project View <span class="status completed">Completed</span></h3>
