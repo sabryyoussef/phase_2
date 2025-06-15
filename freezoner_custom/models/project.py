@@ -462,7 +462,7 @@ class Project(models.Model):
             "name": _("Tasks"),
             "type": "ir.actions.act_window",
             "res_model": "project.task",
-            "view_mode": "tree,form",
+            "view_mode": "list,form",
             "domain": [("project_id", "=", self.id)],
             "context": {"create": True},
         }
@@ -482,7 +482,7 @@ class Project(models.Model):
             "name": _("Documents"),
             "type": "ir.actions.act_window",
             "res_model": "documents.document",
-            "view_mode": "tree,form",
+            "view_mode": "list,form",
             "domain": [("project_id", "=", self.id)],
             "context": {"create": True},
         }
