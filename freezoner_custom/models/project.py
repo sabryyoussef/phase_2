@@ -657,8 +657,11 @@ class Project(models.Model):
         raise UserError(_("The create_documents action is not yet implemented."))
 
     def action_done_project(self):
-        """Placeholder for action_done_project button action. Customize as needed."""
-        raise UserError(_("The action_done_project action is not yet implemented."))
+        """Action method for the 'Project Done' button"""
+        for rec in self:
+            rec.state = 'd_done'
+            rec.message_post(body=_("Project marked as Done via Project Done button"))
+        return True
 
 
 class StageTask(models.Model):
