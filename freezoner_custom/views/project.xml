@@ -412,29 +412,29 @@
     <menuitem id="all_tasks_menu" name="All Tasks" parent="project.menu_main_pm"
               groups="freezoner_custom.template_project_button_group"
               action="all_tasks_action" sequence="7"/>
-    <!-- Minimal tree view for project.task -->
+    <!-- Minimal list view for project.task -->
     <record id="view_project_task_tree_custom" model="ir.ui.view">
-        <field name="name">project.task.tree.custom</field>
+        <field name="name">project.task.list.custom</field>
         <field name="model">project.task</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="user_ids"/>
                 <field name="stage_id"/>
-            </tree>
+            </list>
         </field>
     </record>
 
-    <!-- Minimal tree view for project.project -->
+    <!-- Minimal list view for project.project -->
     <record id="view_project_project_tree_custom" model="ir.ui.view">
-        <field name="name">project.project.tree.custom</field>
+        <field name="name">project.project.list.custom</field>
         <field name="model">project.project</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="user_id"/>
                 <field name="state"/>
-            </tree>
+            </list>
         </field>
     </record>
 </odoo>
