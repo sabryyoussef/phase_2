@@ -295,10 +295,6 @@
                 <field name="state" widget="statusbar"
                     statusbar_visible="b_new,c_in_progress,d_done,on_hold,e_cancel" />
             </xpath>
-            <xpath expr="//button[@name='%(project.project_share_wizard_action)d']"
-                position="replace" />
-            <xpath expr="//button[@name='%(project.project_share_wizard_action)d']"
-                position="replace" />
             <xpath expr="//header" position="inside">
                 <button name="action_done_project" type="object" string="Project Done"
                     groups="freezoner_custom.project_done_button_group"
