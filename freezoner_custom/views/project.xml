@@ -63,9 +63,6 @@
                             <field name="project_id" />
                             <field name="user_ids" widget="many2many_avatar_user" />
                             <field name="stage_id" />
-                            <button name="move_stage" type="object" invisible="1"
-                                context="{'default_project_id': id}" string="Move Stage"
-                                class="oe_highlight" />
                             <button string="Next" invisible="1" name="next_stage" type="object"
                                 icon="fa-arrow-right" />
                             <button string="Previous" invisible="1" name="previous_stage"
