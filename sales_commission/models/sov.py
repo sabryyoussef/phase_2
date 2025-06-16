@@ -102,3 +102,16 @@ class CommissionSOV(models.Model):
     def get_net(self):
         for rec in self:
             rec.net = rec.profit - rec.tax
+
+    @api.constrains("sov_id")
+    def _check_sov_id_exists(self):
+        for rec in self:
+            if not rec.sov_id:
+                raise ValidationError(
+                    "You must select a valid SOV line. The SOV line cannot be empty or missing."
+                )
+            # Extra check: sov_id must exist in DB (should always be true if not deleted)
+            if not rec.sov_id.exists():
+                raise ValidationError(
+                    "The selected SOV line does not exist. Please choose a valid SOV."
+                )
