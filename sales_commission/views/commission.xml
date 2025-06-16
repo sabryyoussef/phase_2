@@ -253,6 +253,7 @@
     <menuitem id="sales_commission_menu_root"
               name="Sales Commissions"
               parent="sale.sale_menu_root"
+              groups="sales_commission.commission_user,sales_commission.commission_supervisor,sales_commission.commission_admin"
               sequence="31"
               action="act_crm_commissions"/>
     <menuitem id="sales_commission_menu"
