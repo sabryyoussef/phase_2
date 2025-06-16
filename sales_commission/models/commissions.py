@@ -266,10 +266,12 @@ class Commission(models.Model):
                 date_to = date_from + relativedelta(months=1)
                 date_from_str = date_from.strftime('%Y-%m-%d')
                 date_to_str = date_to.strftime('%Y-%m-%d')
-                sov = self.env['sale.sov'].sudo().search([('sale_id.state','=', 'sale'),('sale_id.user_id','=', rec.member_id.id),
-                                                          ('sale_id.date_confirmed', '>=', date_from_str),
-                                                          ('sale_id.date_confirmed', '<', date_to_str)
-                                                           ])
+                sov = self.env['sale.sov'].sudo().search([
+                    ('sale_id.state','=', 'sale'),
+                    ('sale_id.user_id','=', rec.member_id.id),
+                    ('sale_id.date_order', '>=', date_from_str),
+                    ('sale_id.date_order', '<', date_to_str)
+                ])
                 if sov:
                     for line in sov:
                         sov_lines.append(
@@ -295,10 +297,12 @@ class Commission(models.Model):
                 date_to = date_from + relativedelta(months=1)
                 date_from_str = date_from.strftime('%Y-%m-%d')
                 date_to_str = date_to.strftime('%Y-%m-%d')
-                sov = self.env['sale.sov'].sudo().search([('sale_id.state','=', 'sale'),('sale_id.user_id','in', rec.team_id.member_ids.ids),
-                                                          ('sale_id.date_confirmed', '>=', date_from_str),
-                                                          ('sale_id.date_confirmed', '<', date_to_str)
-                                                           ])
+                sov = self.env['sale.sov'].sudo().search([
+                    ('sale_id.state','=', 'sale'),
+                    ('sale_id.user_id','in', rec.team_id.member_ids.ids),
+                    ('sale_id.date_order', '>=', date_from_str),
+                    ('sale_id.date_order', '<', date_to_str)
+                ])
                 if sov:
                     for line in sov:
                         sov_lines.append(
