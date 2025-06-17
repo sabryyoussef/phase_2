@@ -1,4 +1,3 @@
-
 from odoo import models, fields, api , _
 from odoo.exceptions import ValidationError
 
@@ -16,7 +15,6 @@ class CrmWizard(models.TransientModel):
             'res_id': self.crm_id.id,
             'activity_type_id': activity_type.id,
             'active': True,
-            'type': 'done',
             'summary': '',
             'note': self.desc or '',
             'user_id': self.crm_id.user_id.id or self.env.uid,
