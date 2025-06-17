@@ -16,3 +16,4 @@ from . import sov
 from . import task_document
 from . import task
 from . import project_fields
+from . import analytic_item

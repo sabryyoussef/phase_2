@@ -11,6 +11,25 @@ from odoo.tools import is_html_empty
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
+    sequence = fields.Integer(string='Sequence', default=10)
+    analytic_account_id = fields.Many2one(
+        'account.analytic.account',
+        string='Analytic Account',
+        copy=False,
+        check_company=True,
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
+    )
+    amount = fields.Float(
+        string='Amount',
+        compute='_compute_amount',
+        store=True,
+        digits=(16, 2),
+    )
+    date = fields.Date(
+        string='Date',
+        default=fields.Date.context_today,
+        copy=False,
+    )
     sale_order_template_id = fields.Many2one(
         comodel_name="sale.order.template",
         string="Quotation Template",
@@ -42,8 +61,18 @@ class SaleOrder(models.Model):
         inverse_name="sale_id",
         string="SOV Lines",
     )
+    analytic_item_ids = fields.One2many(
+        comodel_name="sale.order.analytic.item",
+        inverse_name="sale_order_id",
+        string="Analytic Items",
+    )
 
     # === COMPUTE METHODS === #
+
+    @api.depends('analytic_item_ids.amount')
+    def _compute_amount(self):
+        for order in self:
+            order.amount = sum(order.analytic_item_ids.mapped('amount'))
 
     def _compute_sale_order_template_id(self):
         for order in self:

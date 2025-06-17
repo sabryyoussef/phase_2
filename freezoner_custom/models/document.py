@@ -267,3 +267,11 @@ class Document(models.Model):
                 'default_composition_mode': 'comment',
             }
         }
+
+    def move_task_stage(self):
+        for document in self:
+            if document.res_model == 'project.task':
+                task = self.env['project.task'].browse(document.res_id)
+                if task.exists():
+                    task.write({'stage_id': self.env.ref('project.project_task_stage_3').id})
+        return True

@@ -23,6 +23,7 @@
                 <field name="validity_date" />
             </xpath>
             <xpath expr="//field[@name='date_order']" position="after">
+                <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
             </xpath>
             <xpath expr="//button[@name='action_confirm']" position="attributes">
                 <attribute name="invisible">1</attribute>
@@ -69,10 +70,30 @@
                         </form>
                     </field>
                 </page>
-                <!-- <page name="analytic_items" string="Analytic Account Items">
-                    <field name="analytic_item_ids"
-                        modifiers="{'readonly': [('state', '!=','draft')]}" />
-                </page> -->
+                <page name="analytic_items" string="Analytic Account Items">
+                    <field name="analytic_item_ids">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle" optional="show"/>
+                            <field name="name"/>
+                            <field name="analytic_account_id"/>
+                            <field name="amount"/>
+                            <field name="date"/>
+                            <field name="state"/>
+<!--                            <field name="notes"/>-->
+                        </list>
+                        <form>
+                            <group>
+                                <field name="sequence"/>
+                                <field name="name"/>
+                                <field name="analytic_account_id"/>
+                                <field name="amount"/>
+                                <field name="date"/>
+                                <field name="state"/>
+<!--                                <field name="notes"/>-->
+                            </group>
+                        </form>
+                    </field>
+                </page>
             </xpath>
             <xpath expr="//field[@name='order_line']//list//field[@name='price_subtotal']"
                 position="after">
