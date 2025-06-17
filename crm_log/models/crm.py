@@ -76,7 +76,7 @@ class CrmLead(models.Model):
     #     compute="_compute_is_quotation_expired", store=True
     # )
     is_hide_quotation_button = fields.Boolean(
-        string='Hide “New Quotation” Button'
+        string='Hide "New Quotation" Button'
     )
     compliance_name = fields.Char(string='Compliance Name')
 
@@ -267,4 +267,16 @@ class CrmLead(models.Model):
                 "context": {"default_crm_id": rec.id},
                 "view_id": self.env.ref("crm_log.crm_wizard_form_view").id,
                 "target": "new",
+            }
+
+    def open_call(self):
+        for rec in self:
+            return {
+                'res_model': 'crm.call.wizard',
+                'type': 'ir.actions.act_window',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'context': {'default_crm_id': rec.id},
+                'view_id': self.env.ref("crm_log.crm_call_wizard_form_view").id,
+                'target': 'new'
             }
