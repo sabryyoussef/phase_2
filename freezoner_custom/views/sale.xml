@@ -34,6 +34,40 @@
             </xpath>
             <xpath expr="//page[@name='customer_signature']" position="after">
                 <page name="sov" string="SOV">
+                    <field name="sov_ids">
+                        <list editable="bottom">
+                            <field name="name"/>
+                            <field name="product_id"/>
+                            <field name="qty"/>
+                            <field name="unit_price"/>
+                            <field name="unit_cost"/>
+                            <field name="revenue"/>
+                            <field name="planned_expenses"/>
+                            <field name="actual_expenses"/>
+                            <field name="profit"/>
+                            <field name="profit_margin"/>
+                            <field name="tax"/>
+                            <field name="commission_attribute"/>
+                            <field name="state"/>
+                        </list>
+                        <form>
+                            <group>
+                                <field name="name"/>
+                                <field name="product_id"/>
+                                <field name="qty"/>
+                                <field name="unit_price"/>
+                                <field name="unit_cost"/>
+                                <field name="revenue"/>
+                                <field name="planned_expenses"/>
+                                <field name="actual_expenses"/>
+                                <field name="profit"/>
+                                <field name="profit_margin"/>
+                                <field name="tax"/>
+                                <field name="commission_attribute"/>
+                                <field name="state"/>
+                            </group>
+                        </form>
+                    </field>
                 </page>
                 <!-- <page name="analytic_items" string="Analytic Account Items">
                     <field name="analytic_item_ids"

@@ -37,6 +37,11 @@ class SaleOrder(models.Model):
         default="pending",
         help="Indicates the payment status of the sale order.",
     )
+    sov_ids = fields.One2many(
+        comodel_name="sale.sov",
+        inverse_name="sale_id",
+        string="SOV Lines",
+    )
 
     # === COMPUTE METHODS === #
 

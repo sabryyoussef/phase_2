@@ -18,6 +18,7 @@
         "project",
         "crm",
         "cabinet_directory",
+        "mass_mailing",
     ],
     "data": [
         "security/ir.model.access.csv",

@@ -17,9 +17,6 @@ class Task(models.Model):
     task_document_ids = fields.One2many(
         "documents.document", "task_ids", string="Task Documents"
     )
-    document_count = fields.Integer(
-        compute="_compute_document_count", string="Document Count", store=True
-    )
     document_type_ids = fields.One2many(
         "task.document.lines", "task_ids", string="Document Types"
     )
@@ -86,40 +83,6 @@ class Task(models.Model):
                 .search([("partner_id", "=", task.partner_id.id)])
                 .ids
             )
-
-    def _compute_document_count(self):
-        for task in self:
-            documents = self.env["res.partner.document"]
-
-            # Add documents from required types
-            for line in task.document_required_type_ids:
-                documents += (
-                    self.env["res.partner.document"]
-                    .sudo()
-                    .search(
-                        [
-                            ("partner_id", "=", task.partner_id.id),
-                            ("type_id", "=", line.document_id.id),
-                            ("issue_date", "=", line.issue_date),
-                        ]
-                    )
-                )
-
-            # Add documents from document types
-            for line in task.document_type_ids:
-                documents += (
-                    self.env["res.partner.document"]
-                    .sudo()
-                    .search(
-                        [
-                            ("partner_id", "=", task.partner_id.id),
-                            ("type_id", "=", line.document_id.id),
-                            ("issue_date", "=", line.issue_date),
-                        ]
-                    )
-                )
-
-            task.document_count = len(documents)
 
     @api.depends("sale_order_id")
     def _compute_invoice_id(self):
