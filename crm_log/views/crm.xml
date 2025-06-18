@@ -25,7 +25,7 @@
         <field name="inherit_id" ref="crm.crm_lead_view_form" />
         <field name="arch" type="xml">
             <xpath expr="//form" position="attributes">
-                <attribute name="create">false</attribute>
+                <!-- <attribute name="create">false</attribute> -->
             </xpath>
 <!--            <xpath expr="//button[@name='action_sale_quotations_new']" position="replace">-->
 <!--                <field name="is_quotation_expired" invisible="1" />-->
@@ -154,7 +154,7 @@
         <field name="inherit_id" ref="crm.crm_case_kanban_view_leads" />
         <field name="arch" type="xml">
             <xpath expr="//kanban" position="attributes">
-                <attribute name="create">false</attribute>
+                <!-- <attribute name="create">false</attribute> -->
             </xpath>
             <xpath expr="//field[@name='stage_id']" position="attributes">
                 <attribute name="readonly">true</attribute>
@@ -168,7 +168,7 @@
         <field name="inherit_id" ref="crm.crm_case_tree_view_oppor" />
         <field name="arch" type="xml">
             <xpath expr="//list" position="attributes">
-                <attribute name="create">false</attribute>
+                <!-- <attribute name="create">false</attribute> -->
             </xpath>
             <xpath expr="//field[@name='name']" position="after">
                 <field name="employee_id" optional="hide" />
