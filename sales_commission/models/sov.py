@@ -52,7 +52,8 @@ class CommissionSOV(models.Model):
                 existing = self.search(domain, limit=1)
                 if existing:
                     raise ValidationError(
-                        f"The SOV line '{rec.sov_id.product_id.name}' is already assigned to a commission for this member."
+                        f"The SOV line '{rec.sov_id.product_id.name}' is already "
+                        f"assigned to a commission for this member."
                     )
 
     commission_id = fields.Many2one("crm.commission")
@@ -73,6 +74,15 @@ class CommissionSOV(models.Model):
     profit = fields.Float("Profit", compute="get_profit", store=True)
     tax = fields.Float("Tax", compute="get_tax", store=True)
     net = fields.Float("Net Achievement", compute="get_net", store=True)
+    product_id = fields.Many2one(
+        "product.product", string="Product", related="sov_id.product_id", store=True
+    )
+    qty = fields.Float("Quantity", default=1.0)
+    unit_price = fields.Float("Unit Price", default=0.0)
+    unit_cost = fields.Float("Unit Cost", default=0.0)
+    actual_expenses = fields.Float("Actual Expenses", default=0.0)
+    profit_margin = fields.Float("Profit Margin", default=0.0)
+    sov_revenue = fields.Float("Sov Revenue", default=0.0)
     commission_attribute = fields.Selection(
         string="Commission Attribute",
         selection=[
