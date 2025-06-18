@@ -192,15 +192,6 @@ class CrmLead(models.Model):
                     _("Please make sure to add a phone number or/and an Email")
                 )
 
-            attachments = self.env["documents.document"].search(
-                [
-                    ("res_model", "=", "crm.lead"),
-                    ("res_id", "=", rec.id),
-                ]
-            )
-            if not attachments:
-                raise ValidationError(_("Please attach at least one Proposal"))
-
     def action_check_attachments(self):
         for lead in self:
             attachments = self.env["documents.document"].search(
