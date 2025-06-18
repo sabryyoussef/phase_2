@@ -17,4 +17,4 @@ access_required_documents_wizard,required_documents_wizard,model_required_docume
 access_remarks_wizard,remarks_wizard,model_remarks_wizard,,1,1,1,1
 access_project_products_user,access_project_products_user,model_project_project_products,base.group_user,1,1,1,1
 access_project_products_manager,access_project_products_manager,model_project_project_products,base.group_system,1,1,1,1
-access_sale_order_analytic_item_user,sale.order.analytic.item user,model_sale_order_analytic_item,base.group_user,1,1,1,1 
+access_sale_order_analytic_item_user,sale.order.analytic.item user,model_sale_order_analytic_item,base.group_user,1,1,1,1
