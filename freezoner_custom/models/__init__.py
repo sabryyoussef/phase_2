@@ -1,19 +1,22 @@
-from . import documents_share
-from . import project_product
-from . import project_products_remarks
-from . import exception
-from . import partner_shareholder
-from . import rating
-from . import document
-from . import partner
-from  . import move
-from . import sale
-from . import document_request
-from . import documents
-from . import product
-from . import project
-from . import sov
-from . import task_document
-from . import task
-from . import project_fields
-from . import analytic_item
+from . import (
+    analytic_item,
+    document,
+    document_request,
+    documents,
+    documents_share,
+    exception,
+    move,
+    partner,
+    partner_shareholder,
+    product,
+    project,
+    project_fields,
+    project_product,
+    project_products_remarks,
+    rating,
+    sale,
+    sale_order_line,
+    sov,
+    task,
+    task_document,
+)
