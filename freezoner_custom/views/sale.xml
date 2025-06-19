@@ -17,13 +17,14 @@
             <xpath expr="//div[@name='button_box']" position="after">
                 <field name="is_expired" invisible="1" />
                 <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
-                    modifiers="{'invisible': [('is_expired', '=', True)]}" />
+                    invisible="not is_expired" />
             </xpath>
             <xpath expr="//field[@name='validity_date']" position="replace">
                 <field name="validity_date" />
             </xpath>
             <xpath expr="//field[@name='date_order']" position="after">
-                <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                <field name="analytic_account_id" groups="analytic.group_analytic_accounting" />
+                <field name="payment_method" required="1" />
             </xpath>
             <xpath expr="//button[@name='action_confirm']" position="attributes">
                 <attribute name="invisible">1</attribute>
@@ -32,40 +33,46 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath expr="//header" position="inside">
+                <button name="action_confirm_custom"
+                    string="Confirm"
+                    class="btn-primary"
+                    type="object"
+                    invisible="state not in ('draft', 'sent')"
+                    data-hotkey="v" />
             </xpath>
             <xpath expr="//page[@name='customer_signature']" position="after">
                 <page name="sov" string="SOV">
                     <field name="sov_ids">
                         <list editable="bottom">
-                            <field name="name"/>
-                            <field name="product_id"/>
-                            <field name="qty"/>
-                            <field name="unit_price"/>
-                            <field name="unit_cost"/>
-                            <field name="revenue"/>
-                            <field name="planned_expenses"/>
-                            <field name="actual_expenses"/>
-                            <field name="profit"/>
-                            <field name="profit_margin"/>
-                            <field name="tax"/>
-                            <field name="commission_attribute"/>
-                            <field name="state"/>
+                            <field name="name" />
+                            <field name="product_id" />
+                            <field name="qty" />
+                            <field name="unit_price" />
+                            <field name="unit_cost" />
+                            <field name="revenue" />
+                            <field name="planned_expenses" />
+                            <field name="actual_expenses" />
+                            <field name="profit" />
+                            <field name="profit_margin" />
+                            <field name="tax" />
+                            <field name="commission_attribute" />
+                            <field name="state" />
                         </list>
                         <form>
                             <group>
-                                <field name="name"/>
-                                <field name="product_id"/>
-                                <field name="qty"/>
-                                <field name="unit_price"/>
-                                <field name="unit_cost"/>
-                                <field name="revenue"/>
-                                <field name="planned_expenses"/>
-                                <field name="actual_expenses"/>
-                                <field name="profit"/>
-                                <field name="profit_margin"/>
-                                <field name="tax"/>
-                                <field name="commission_attribute"/>
-                                <field name="state"/>
+                                <field name="name" />
+                                <field name="product_id" />
+                                <field name="qty" />
+                                <field name="unit_price" />
+                                <field name="unit_cost" />
+                                <field name="revenue" />
+                                <field name="planned_expenses" />
+                                <field name="actual_expenses" />
+                                <field name="profit" />
+                                <field name="profit_margin" />
+                                <field name="tax" />
+                                <field name="commission_attribute" />
+                                <field name="state" />
                             </group>
                         </form>
                     </field>
@@ -73,23 +80,21 @@
                 <page name="analytic_items" string="Analytic Account Items">
                     <field name="analytic_item_ids">
                         <list editable="bottom">
-                            <field name="sequence" widget="handle" optional="show"/>
-                            <field name="name"/>
-                            <field name="analytic_account_id"/>
-                            <field name="amount"/>
-                            <field name="date"/>
-                            <field name="state"/>
-<!--                            <field name="notes"/>-->
+                            <field name="sequence" widget="handle" optional="show" />
+                            <field name="name" />
+                            <field name="analytic_account_id" />
+                            <field name="amount" />
+                            <field name="date" />
+                            <field name="state" />
                         </list>
                         <form>
                             <group>
-                                <field name="sequence"/>
-                                <field name="name"/>
-                                <field name="analytic_account_id"/>
-                                <field name="amount"/>
-                                <field name="date"/>
-                                <field name="state"/>
-<!--                                <field name="notes"/>-->
+                                <field name="sequence" />
+                                <field name="name" />
+                                <field name="analytic_account_id" />
+                                <field name="amount" />
+                                <field name="date" />
+                                <field name="state" />
                             </group>
                         </form>
                     </field>
@@ -110,9 +115,6 @@
     <record model='ir.ui.menu' id='sale.menu_sales_config'>
         <field name="name">Pro-forma Invoice Orders</field>
     </record>
-    <!-- <record model='ir.ui.menu' id='sale_crm.sale_order_menu_quotations_crm'>
-        <field name="name">My Pro-forma Invoice</field>
-    </record> -->
     <record model='ir.ui.menu' id='sale.menu_sale_quotations'>
         <field name="name">Pro-forma Invoice</field>
     </record>
