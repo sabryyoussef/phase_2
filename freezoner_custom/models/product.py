@@ -1,7 +1,7 @@
 import logging
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -207,9 +207,13 @@ class ProductTemplate(models.Model):
 
     service_tracking = fields.Selection(
         [
+            ("no", "No"),
             ("manual", "Manual"),
             ("automatic", "Automatic"),
             ("new_workflow", "New Workflow"),
+            ("project_only", "Project Only"),
+            ("task_in_project", "Task in Project"),
+            ("task_global_project", "Task in Global Project"),
         ],
         string="Service Tracking",
         default="manual",
@@ -351,6 +355,12 @@ class Product(models.Model):
     # Inherited Fields
     is_service_commission = fields.Boolean(
         related="product_tmpl_id.is_service_commission", store=True, readonly=False
+    )
+
+    service_tracking = fields.Selection(
+        related="product_tmpl_id.service_tracking",
+        store=True,
+        readonly=False,
     )
 
     # Additional Fields
