@@ -18,7 +18,11 @@ class SaleOrder(models.Model):
         string="Analytic Account",
         copy=False,
         check_company=True,
-        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
+        domain=lambda self: [
+            "|",
+            ("company_id", "=", False),
+            ("company_id", "=", self.company_id.id),
+        ],
     )
     amount = fields.Float(
         string="Amount",
@@ -139,9 +143,11 @@ class SaleOrder(models.Model):
     def _compute_sale_order_template_id(self):
         for order in self:
             company_template = order.company_id.sale_order_template_id
-            if company_template and (order.sale_order_template_id != company_template):
+            has_diff_template = (
+                company_template and order.sale_order_template_id != company_template
+            )
+            if has_diff_template:
                 if hasattr(order, "website_id") and order.website_id:
-                    # Skip applying quotation template for eCommerce orders.
                     continue
                 order.sale_order_template_id = company_template.id
 
@@ -228,9 +234,11 @@ class SaleOrder(models.Model):
         for rec in self:
             first_confirmed_date = None
             for line in rec.message_ids:
-                if line.subtype_id.description == "Quotation confirmed":
-                    if first_confirmed_date is None or line.date < first_confirmed_date:
-                        first_confirmed_date = line.date
+                is_confirmed = line.subtype_id.description == "Quotation confirmed"
+                if is_confirmed and (
+                    not first_confirmed_date or line.date < first_confirmed_date
+                ):
+                    first_confirmed_date = line.date
             rec.date_confirmed = first_confirmed_date
 
     def get_analytic_item_ids(self):
@@ -293,13 +301,17 @@ class SaleOrder(models.Model):
             if team and user.id in team.member_ids.ids:
                 partner = rec.partner_id
                 if partner and partner.create_date:
-                    create_date = partner.create_date.date()  # Convert to date
+                    create_date = partner.create_date.date()
                     if create_date < (
                         fields.Date.context_today(self) - timedelta(days=180)
                     ):
-                        raise ValidationError(
-                            "Customer Profile has been created more than six (6) months ago. As a member of Sales Team, you are not allowed to create an invoice for this contact. Please contact your Line Manager for assistance ."
+                        msg = (
+                            "Customer Profile has been created more than six (6) "
+                            "months ago. As a member of Sales Team, you are not "
+                            "allowed to create an invoice for this contact. "
+                            "Please contact your Line Manager for assistance."
                         )
+                        raise ValidationError(msg)
 
     # === ONCHANGE METHODS === #
 
@@ -540,7 +552,7 @@ class SaleOrder(models.Model):
             ).mapped("product_id")
 
             if products_to_process:
-                # Create a new project if it doesn't exist for the sale order
+                # Create a new project if it doesn't exist
                 project = self.env["project.project"].search(
                     [("sale_id", "=", rec.id)], limit=1
                 )
@@ -588,40 +600,11 @@ class SaleOrder(models.Model):
                         task_data["planned_hours"] = task.planned_hours
                         task_data["user_ids"] = task.user_ids.ids
                         task_data["child_ids"] += [
-                            {
-                                "is_subtask": True,
-                                "name": child.name,
-                                "project_id": project.id,
-                                "display_project_id": project.id,
-                                "description": child.description,
-                                "sequence": child.sequence,
-                                "planned_hours": child.planned_hours,
-                                # Corrected: Remove rec.user_id from child task's user_ids
-                                "user_ids": (
-                                    [(6, 0, child.user_ids.ids)]
-                                    if child.user_ids
-                                    else []
-                                ),
-                                "checkpoint_ids": [
-                                    (
-                                        0,
-                                        0,
-                                        {  # Command to create a new checkpoint
-                                            "reached_checkpoint_ids": [
-                                                (6, 0, cp.reached_checkpoint_ids.ids)
-                                            ],
-                                            "stage_id": cp.stage_id.id,
-                                            "milestone_id": cp.milestone_id.id,
-                                            "sequence": cp.sequence,
-                                        },
-                                    )
-                                    for cp in child.checkpoint_ids
-                                ],
-                            }
+                            self._prepare_child_task_data(child, project)
                             for child in task.child_ids
                         ]
 
-                # Deduplicate child_ids for each task
+                # Create tasks with unique children
                 for task_name, task_data in merged_tasks.items():
                     if task_name not in existing_task_names:
                         unique_children = {
@@ -629,48 +612,9 @@ class SaleOrder(models.Model):
                         }.values()
 
                         tasks_to_create.append(
-                            {
-                                "name": task_name,
-                                "project_id": project.id,
-                                "display_project_id": project.id,
-                                "sale_order_id": rec.id,
-                                # Parent task still includes sale user and task's user_ids
-                                "user_ids": [
-                                    (
-                                        6,
-                                        0,
-                                        [rec.user_id.id]
-                                        + (
-                                            task_data["user_ids"]
-                                            if task_data.get("user_ids")
-                                            else []
-                                        ),
-                                    )
-                                ],
-                                "description": task_data["description"],
-                                "planned_hours": task_data["planned_hours"],
-                                "sequence": task_data["sequence"],
-                                "child_ids": [
-                                    (
-                                        0,
-                                        0,
-                                        {
-                                            "is_subtask": True,
-                                            "name": child["name"],
-                                            "description": child["description"],
-                                            "sequence": child["sequence"],
-                                            "planned_hours": child["planned_hours"],
-                                            "project_id": project.id,
-                                            "sale_order_id": rec.id,
-                                            "user_ids": child[
-                                                "user_ids"
-                                            ],  # Now uses corrected user_ids (no sale user)
-                                            "checkpoint_ids": child["checkpoint_ids"],
-                                        },
-                                    )
-                                    for child in unique_children
-                                ],
-                            }
+                            self._prepare_parent_task_data(
+                                task_name, task_data, project, rec, unique_children
+                            )
                         )
                         existing_task_names.add(task_name)
 
@@ -678,113 +622,50 @@ class SaleOrder(models.Model):
                 if tasks_to_create:
                     self.env["project.task"].create(tasks_to_create)
 
-                # Prepare task.document.lines, task.document.required.lines, and partner fields in bulk
+    def _prepare_child_task_data(self, child, project):
+        """Helper method to prepare child task data"""
+        return {
+            "is_subtask": True,
+            "name": child.name,
+            "project_id": project.id,
+            "display_project_id": project.id,
+            "description": child.description,
+            "sequence": child.sequence,
+            "planned_hours": child.planned_hours,
+            "user_ids": [(6, 0, child.user_ids.ids)] if child.user_ids else [],
+            "checkpoint_ids": [
+                (
+                    0,
+                    0,
+                    {
+                        "reached_checkpoint_ids": [
+                            (6, 0, cp.reached_checkpoint_ids.ids)
+                        ],
+                        "stage_id": cp.stage_id.id,
+                        "milestone_id": cp.milestone_id.id,
+                        "sequence": cp.sequence,
+                    },
+                )
+                for cp in child.checkpoint_ids
+            ],
+        }
 
-                document_lines_to_create = []
-                document_required_lines_to_create = []
-                # Track processed (document_type_id, partner_id) combinations
-                processed_docs = set()
-                processed_required_docs = set()
-
-                for line in rec.order_line:
-                    for doc_line in line.product_id.product_tmpl_id.document_type_ids:
-                        doc_type = doc_line.document_id
-                        if not doc_type:
-                            continue
-
-                        partner_id = rec.partner_id.id
-                        unique_key = (doc_type.id, partner_id)
-
-                        # Skip if already processed
-                        if unique_key in processed_docs:
-                            continue
-                        processed_docs.add(unique_key)
-
-                        # Check existing document
-                        existing_doc = (
-                            self.env["documents.document"]
-                            .sudo()
-                            .search(
-                                [
-                                    ("type_id", "=", doc_type.id),
-                                    ("partner_id", "=", partner_id),
-                                ],
-                                limit=1,
-                            )
-                        )
-
-                        if existing_doc:
-                            existing_doc.sudo().write(
-                                {"deliverable_project_id": project.id}
-                            )
-                        else:
-                            document_lines_to_create.append(
-                                {
-                                    "deliverable_project_id": project.id,
-                                    "folder_id": project.documents_folder_id.id,
-                                    # 'partner_id': partner_id,
-                                    "type_id": doc_type.id,
-                                    "name": f"{doc_type.name} - {rec.partner_id.name}",
-                                    "issue_date": False,
-                                    "expiration_date": False,
-                                }
-                            )
-
-                    # Process document_required_type_ids (Requirements)
-                    for (
-                        req_doc_line
-                    ) in line.product_id.product_tmpl_id.document_required_type_ids:
-                        req_doc_type = req_doc_line.document_id
-                        if not req_doc_type:
-                            continue
-
-                        partner_id = rec.partner_id.id
-                        unique_key = (req_doc_type.id, partner_id)
-
-                        # Skip if already processed
-                        if unique_key in processed_required_docs:
-                            continue
-                        processed_required_docs.add(unique_key)
-
-                        # Check existing document
-                        existing_doc = (
-                            self.env["documents.document"]
-                            .sudo()
-                            .search(
-                                [
-                                    ("type_id", "=", req_doc_type.id),
-                                    ("partner_id", "=", partner_id),
-                                ],
-                                limit=1,
-                            )
-                        )
-
-                        if existing_doc:
-                            existing_doc.sudo().write(
-                                {"required_project_id": project.id}
-                            )
-                        else:
-                            document_required_lines_to_create.append(
-                                {
-                                    "required_project_id": project.id,
-                                    "folder_id": project.documents_folder_id.id,
-                                    # 'partner_id': partner_id,
-                                    "type_id": req_doc_type.id,
-                                    "name": f"{req_doc_type.name} - {rec.partner_id.name}",
-                                    "issue_date": False,
-                                    "expiration_date": False,
-                                }
-                            )
-
-                # Bulk create documents
-                if document_required_lines_to_create:
-                    self.env["documents.document"].sudo().create(
-                        document_required_lines_to_create
-                    )
-                if document_lines_to_create:
-                    self.env["documents.document"].sudo().create(
-                        document_lines_to_create
-                    )
+    def _prepare_parent_task_data(self, name, data, project, rec, children):
+        """Helper method to prepare parent task data"""
+        return {
+            "name": name,
+            "project_id": project.id,
+            "display_project_id": project.id,
+            "sale_order_id": rec.id,
+            "user_ids": [(6, 0, [rec.user_id.id] + (data["user_ids"] or []))],
+            "description": data["description"],
+            "planned_hours": data["planned_hours"],
+            "sequence": data["sequence"],
+            "child_ids": [
+                (0, 0, self._prepare_child_task_data(child, project))
+                for child in children
+            ],
+        }
 
     def remove_duplicate_tasks(self):
         for rec in self:
@@ -886,13 +767,18 @@ class SaleOrder(models.Model):
                         total += line.price_total
                 product.lst_price = total * 0.04
                 if product not in rec.order_line.mapped("product_id"):
+                    msg = (
+                        "Kindly note that an additional charge of 4% is applicable "
+                        "to the total invoice amount to cover online payment "
+                        "processing fees. Your attention to this matter is appreciated."
+                    )
                     lines.append(
                         (
                             0,
                             0,
                             {
                                 "product_id": product.id,
-                                "name": "Kindly note that an additional charge of 4% is applicable to the total invoice amount to cover online payment processing fees. Your attention to this matter is appreciated.",
+                                "name": msg,
                                 "product_uom_qty": 1,
                                 "price_unit": total,
                             },
@@ -993,47 +879,40 @@ class SaleOrder(models.Model):
         for rec in self:
             if rec.partner_id and rec.partner_id.company_type == "company":
                 if not rec.partner_id.phone:
-                    raise ValidationError(" Please add phone number for the customer ")
+                    raise ValidationError("Please add phone number for the customer")
                 if not rec.partner_id.email:
-                    raise ValidationError(" Please add email for the customer ")
-                # Check if license_authority_id field exists before accessing
+                    raise ValidationError("Please add email for the customer")
                 if (
                     hasattr(rec.partner_id, "license_authority_id")
                     and not rec.partner_id.license_authority_id
                 ):
                     raise ValidationError(
-                        " Please add license authority for the customer "
+                        "Please add license authority for the customer"
                     )
-                # Check if incorporation_date field exists before accessing
                 if (
                     hasattr(rec.partner_id, "incorporation_date")
                     and not rec.partner_id.incorporation_date
                 ):
                     raise ValidationError(
-                        " Please add incorporation date for the customer "
+                        "Please add incorporation date for the customer"
                     )
-                # Check if license_number field exists before accessing
                 if (
                     hasattr(rec.partner_id, "license_number")
                     and not rec.partner_id.license_number
                 ):
-                    raise ValidationError(
-                        " Please add license number for the customer "
-                    )
+                    raise ValidationError("Please add license number for the customer")
             if rec.partner_id and rec.partner_id.company_type == "person":
                 if not rec.partner_id.phone:
-                    raise ValidationError(" Please add phone number for the customer ")
+                    raise ValidationError("Please add phone number for the customer")
                 if not rec.partner_id.email:
-                    raise ValidationError(" Please add email for the customer ")
-                # Check if gender field exists before accessing
+                    raise ValidationError("Please add email for the customer")
                 if hasattr(rec.partner_id, "gender") and not rec.partner_id.gender:
-                    raise ValidationError(" Please add gender for the customer ")
-                # Check if nationality_id field exists before accessing
+                    raise ValidationError("Please add gender for the customer")
                 if (
                     hasattr(rec.partner_id, "nationality_id")
                     and not rec.partner_id.nationality_id
                 ):
-                    raise ValidationError(" Please add nationality for the customer ")
+                    raise ValidationError("Please add nationality for the customer")
         return res
 
     @api.model
