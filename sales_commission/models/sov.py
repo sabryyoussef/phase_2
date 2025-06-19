@@ -6,19 +6,13 @@ class CommissionSOV(models.Model):
     _name = "commission.sale.sov"
     _description = "Commission SOV"
 
-    sale_id = fields.Many2one("sale.order", string="Sale Order", required=True)
-    sov_ids = fields.Many2many(
-        "commission.sale.sov", string="SOV Lines", compute="_get_sov_lines", store=True
-    )
-
     @api.depends("sale_id")
     def _get_sov_lines(self):
         for rec in self:
-            rec.sov_ids = (
-                self.env["commission.sale.sov"]
-                .search([("sale_id", "=", rec.sale_id.id)])
-                .ids
-            )
+            if rec.sale_id and hasattr(rec.sale_id, "sov_ids"):
+                rec.sov_ids = rec.sale_id.sov_ids.ids
+            else:
+                rec.sov_ids = [(5, 0, 0)]
 
     @api.onchange("sov_id")
     def _onchange_data(self):
@@ -118,10 +112,12 @@ class CommissionSOV(models.Model):
         for rec in self:
             if not rec.sov_id:
                 raise ValidationError(
-                    "You must select a valid SOV line. The SOV line cannot be empty or missing."
+                    "You must select a valid SOV line. The SOV line cannot be "
+                    "empty or missing."
                 )
             # Extra check: sov_id must exist in DB (should always be true if not deleted)
             if not rec.sov_id.exists():
                 raise ValidationError(
-                    "The selected SOV line does not exist. Please choose a valid SOV."
+                    "The selected SOV line does not exist. Please choose a "
+                    "valid SOV."
                 )
