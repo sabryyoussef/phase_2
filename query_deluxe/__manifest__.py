@@ -2,7 +2,7 @@
     "name": "PostgreSQL Query Deluxe",
     "description": "Execute postgreSQL query into Odoo interface",
     "author": "Yvan Dotet",
-    "depends": ["base"],
+    "depends": ["base", "mail"],
     "application": True,
     "version": "18.0.0.1",
     "license": "AGPL-3",

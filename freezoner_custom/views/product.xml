@@ -8,16 +8,16 @@
                 <page name="documents" string="Deliverable Document">
                     <field name="document_type_ids">
                         <list editable="bottom">
-<!--                            <field name="document_id"/>-->
-<!--                            <field name="is_required"/>-->
+                            <field name="document_id"/>
+                            <field name="is_required"/>
                         </list>
                     </field>
                 </page>
                 <page name="required_documents" string="Required Document">
                     <field name="document_required_type_ids">
                         <list editable="bottom">
-<!--                            <field name="document_id"/>-->
-<!--                            <field name="is_required"/>-->
+                            <field name="document_id"/>
+                            <field name="is_required"/>
                         </list>
                     </field>
                 </page>

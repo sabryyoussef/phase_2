@@ -1,25 +1,36 @@
+from odoo import fields, models
 
-from odoo import api, fields, models
 
 class Shareholder(models.Model):
-    _name = 'shareholder.data'
+    _name = "shareholder.data"
 
     name = fields.Char()
     position = fields.Char()
-    project_id = fields.Many2one('project.project')
-    partner_id = fields.Many2one('res.partner')
-    contact_id = fields.Many2one('res.partner')
-    relationship_ids = fields.Many2many("business.relationships", string="Relationships")
+    project_id = fields.Many2one("project.project")
+    partner_id = fields.Many2one("res.partner")
+    contact_id = fields.Many2one("res.partner")
+    relationship_ids = fields.Many2many(
+        "business.relationships", string="Relationships"
+    )
     shares = fields.Float(string="# of Shares", default=1)
     total = fields.Float(string="Total Shareholding Value", default=1)
 
 
 class LicenseActivity(models.Model):
-    _name = 'license.activity'
+    _name = "license.activity"
 
-    name = fields.Char(string="name", required=True, )
+    name = fields.Char(string="name", required=True)
+    license_authority_id = fields.Many2one(
+        "product.attribute.value",
+        string="License Authority",
+        domain="[('attribute_id.name', '=', 'Authorities')]",
+    )
+
 
 class LegalForm(models.Model):
-    _name = 'legal.form'
+    _name = "legal.form"
 
-    name = fields.Char(string="name", required=True, )
+    name = fields.Char(
+        string="name",
+        required=True,
+    )
