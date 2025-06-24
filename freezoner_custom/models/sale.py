@@ -133,6 +133,14 @@ class SaleOrder(models.Model):
 
     is_expired = fields.Boolean(compute="check_is_expired")
 
+    # Task Management
+    tasks_ids = fields.Many2many(
+        "project.task",
+        string="Related Tasks",
+        compute="_compute_tasks_ids",
+        help="All tasks related to this sale order through projects",
+    )
+
     # === COMPUTE METHODS === #
 
     @api.depends("analytic_item_ids.amount")
@@ -207,8 +215,6 @@ class SaleOrder(models.Model):
                 order.date_order if order.state in ["sale", "done"] else False
             )
 
-    # === MISSING COMPUTE METHODS FROM ODOO 16 === #
-
     @api.depends("validity_date")
     def check_is_expired(self):
         for rec in self:
@@ -270,6 +276,14 @@ class SaleOrder(models.Model):
     def get_total_net_achievement(self):
         for rec in self:
             rec.total_net_achievement = sum(line.net for line in rec.sov_ids)
+
+    @api.depends("project_ids", "project_ids.task_ids")
+    def _compute_tasks_ids(self):
+        for order in self:
+            all_tasks = self.env["project.task"]
+            for project in order.project_ids:
+                all_tasks |= project.task_ids
+            order.tasks_ids = all_tasks
 
     # === CONSTRAINT METHODS === #
 
