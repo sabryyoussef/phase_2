@@ -277,7 +277,7 @@ class Task(models.Model):
             return False
         return self.stage_find(project_id, [("fold", "=", False)])
 
-    def _read_group_stage_ids(self, stages, domain, order):
+    def _read_group_stage_ids(self, stages, domain):
         project_id = self.env.context.get("default_project_id")
         if project_id:
             return stages.filtered(lambda s: project_id in s.project_ids)
