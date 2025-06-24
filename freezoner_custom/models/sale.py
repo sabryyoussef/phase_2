@@ -140,6 +140,11 @@ class SaleOrder(models.Model):
         compute="_compute_tasks_ids",
         help="All tasks related to this sale order through projects",
     )
+    tasks_count = fields.Integer(
+        string="Tasks Count",
+        compute="_compute_tasks_ids",
+        help="Number of tasks related to this sale order",
+    )
 
     # === COMPUTE METHODS === #
 
@@ -284,6 +289,7 @@ class SaleOrder(models.Model):
             for project in order.project_ids:
                 all_tasks |= project.task_ids
             order.tasks_ids = all_tasks
+            order.tasks_count = len(all_tasks)
 
     # === CONSTRAINT METHODS === #
 
