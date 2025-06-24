@@ -145,6 +145,11 @@ class SaleOrder(models.Model):
         compute="_compute_tasks_ids",
         help="Number of tasks related to this sale order",
     )
+    closed_task_count = fields.Integer(
+        string="Closed Tasks Count",
+        compute="_compute_tasks_ids",
+        help="Number of closed tasks related to this sale order",
+    )
 
     # === COMPUTE METHODS === #
 
@@ -290,6 +295,9 @@ class SaleOrder(models.Model):
                 all_tasks |= project.task_ids
             order.tasks_ids = all_tasks
             order.tasks_count = len(all_tasks)
+            # Count closed tasks (tasks in done/closed states)
+            closed_tasks = all_tasks.filtered(lambda t: t.stage_id.fold)
+            order.closed_task_count = len(closed_tasks)
 
     # === CONSTRAINT METHODS === #
 
