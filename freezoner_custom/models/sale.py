@@ -800,6 +800,57 @@ class SaleOrder(models.Model):
                         "to the total invoice amount to cover online payment "
                         "processing fees. Your attention to this matter is appreciated."
                     )
+                    # Ensure we get a valid UoM with proper rounding
+                    uom = None
+
+                    # First try product's UoM if it has valid rounding
+                    if product.uom_id and product.uom_id.rounding > 0:
+                        uom = product.uom_id
+
+                    # Fallback to standard 'Units' UoM
+                    if not uom:
+                        uom = self.env["uom.uom"].search(
+                            [("name", "=", "Units"), ("rounding", ">", 0)], limit=1
+                        )
+
+                    # Fallback to any valid UoM with proper rounding
+                    if not uom:
+                        uom = self.env["uom.uom"].search(
+                            [("rounding", ">", 0)], limit=1
+                        )
+
+                    # Last resort: get the default UoM category and find a valid one
+                    if not uom:
+                        unit_category = self.env.ref(
+                            "uom.product_uom_categ_unit", raise_if_not_found=False
+                        )
+                        if unit_category:
+                            uom = self.env["uom.uom"].search(
+                                [
+                                    ("category_id", "=", unit_category.id),
+                                    ("rounding", ">", 0),
+                                ],
+                                limit=1,
+                            )
+
+                    # Final fallback: create a simple UoM if none exists
+                    if not uom:
+                        uom = self.env["uom.uom"].create(
+                            {
+                                "name": "Unit",
+                                "category_id": self.env.ref(
+                                    "uom.product_uom_categ_unit"
+                                ).id,
+                                "factor": 1.0,
+                                "rounding": 0.01,
+                                "uom_type": "reference",
+                            }
+                        )
+
+                    # Ensure the product has this UoM set
+                    if not product.uom_id or product.uom_id.rounding <= 0:
+                        product.uom_id = uom
+
                     lines.append(
                         (
                             0,
@@ -808,7 +859,8 @@ class SaleOrder(models.Model):
                                 "product_id": product.id,
                                 "name": msg,
                                 "product_uom_qty": 1,
-                                "price_unit": total,
+                                "product_uom": uom.id,
+                                "price_unit": total * 0.04,
                             },
                         )
                     )
@@ -820,7 +872,7 @@ class SaleOrder(models.Model):
                     .search([("stripe_visa", "=", True)], limit=1)
                 )
                 for line in rec.order_line:
-                    if product.id == line.product_id.id:
+                    if product and product.id == line.product_id.id:
                         line.unlink()
 
     # Override action_confirm method
