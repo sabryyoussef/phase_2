@@ -87,8 +87,3 @@ class BusinessShareholder(models.Model):
         "client.document", string="Memorandum of Association"
     )
     apply_visa = fields.Boolean(string="Apply Visa")
-
-    # Address relation
-    address_ids = fields.One2many(
-        "res.partner.address", "shareholder_id", string="Addresses"
-    )
