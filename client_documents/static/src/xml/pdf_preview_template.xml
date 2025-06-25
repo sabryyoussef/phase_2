@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
-    <t t-name="client_documents.Many2ManyPdfPreview">
+    <t t-name="client_documents.Many2ManyPdfPreview" owl="1">
         <div class="o_pdf_preview">
-            <t t-foreach="state.attachments" t-as="attachmentId">
-                <div class="o_pdf_preview_item">
-                    <!-- Placeholder for PDF rendering -->
-                    <div t-att-data-id="attachmentId" class="o_pdf_canvas">
-                        <!-- PDF.js or other library will render the PDF here -->
+            <t t-if="state.attachments.length > 0">
+                <t t-foreach="state.attachments" t-as="attachmentId" t-key="attachmentId">
+                    <div class="o_pdf_preview_item">
+                        <!-- Placeholder for PDF rendering -->
+                        <div t-att-data-id="attachmentId" class="o_pdf_canvas">
+                            <!-- PDF.js or other library will render the PDF here -->
+                            <div class="text-muted p-3">
+                                <i class="fa fa-file-pdf-o fa-2x"/>
+                                <div>PDF Preview</div>
+                                <small>Attachment ID: <t t-esc="attachmentId"/></small>
+                            </div>
+                        </div>
                     </div>
+                </t>
+            </t>
+            <t t-else="">
+                <div class="text-muted text-center p-4">
+                    <i class="fa fa-file-o fa-3x mb-2"/>
+                    <div>No PDF files attached</div>
                 </div>
             </t>
         </div>

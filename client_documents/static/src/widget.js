@@ -1,31 +1,30 @@
 /** @odoo-module **/
 
-import { Component } from '@odoo/owl';
-import { useState } from '@odoo/owl/hooks';
-import { registry } from '@odoo/owl/core';
+import { Component, useState } from "@odoo/owl";
+import { registry } from "@web/core/registry";
 
-class Many2ManyPdfPreview extends Component {
-    setup() {
-        this.state = useState({
-            attachments: this.props.recordData.pdf_files.res_ids || []
-        });
-    }
+export class Many2ManyPdfPreview extends Component {
+  static template = "client_documents.Many2ManyPdfPreview";
 
-    async renderPdfPreviews() {
-        const attachments = this.state.attachments;
-        for (const attachmentId of attachments) {
-            // Fetch the attachment using attachmentId and render preview
-            // Use PDF.js or any other library to render the preview
-        }
-    }
+  setup() {
+    this.state = useState({
+      attachments: this.props.record?.data?.pdf_files?.res_ids || [],
+    });
+  }
 
-    mounted() {
-        this.renderPdfPreviews();
+  async renderPdfPreviews() {
+    const attachments = this.state.attachments;
+    for (const attachmentId of attachments) {
+      // Fetch the attachment using attachmentId and render preview
+      // Use PDF.js or any other library to render the preview
     }
+  }
+
+  mounted() {
+    this.renderPdfPreviews();
+  }
 }
 
-Many2ManyPdfPreview.template = 'client_documents.Many2ManyPdfPreview';
-
-registry.category('components').add('Many2ManyPdfPreview', Many2ManyPdfPreview);
-
-export default Many2ManyPdfPreview;
+registry
+  .category("view_widgets")
+  .add("many2many_pdf_preview", Many2ManyPdfPreview);
