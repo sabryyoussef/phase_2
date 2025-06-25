@@ -3,7 +3,7 @@ access_compliance_document_lines,compliance_document_lines,model_compliance_docu
 access_res_partner_address,res_partner_address,model_res_partner_address,,1,1,1,1
 access_business_structure,business_structure,model_business_structure,,1,1,1,1
 access_business_relationships,business_relationships,model_business_relationships,,1,1,1,1
-access_res_partner_shareholder,res_partner_shareholder,model_res_partner_shareholder,,1,1,1,1
+access_res_partner_business_shareholder,res_partner_business_shareholder,model_res_partner_business_shareholder,,1,1,1,1
 access_res_partner_ubo,res_partner_ubo,model_res_partner_ubo,,1,1,1,1
 access_res_nationality,res_nationality,model_res_nationality,,1,1,1,1
 access_initial_client_onboarding_stage,initial_client_onboarding_stage,model_initial_client_onboarding_stage,,1,1,1,1
