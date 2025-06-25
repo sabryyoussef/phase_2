@@ -131,7 +131,7 @@
                     <field name="required_documents_ids" widget="many2many"
                         modifiers="{'readonly':[('is_complete_required','=', True)]}"
                         domain="[('partner_id', 'in', project_partner_ids)]"
-                        context="{'default_required_project_id': id, 'default_folder_id': documents_folder_id,'default_partner_id': partner_id}">
+                        context="{'default_project_id': id,'default_partner_id': partner_id}">
                         <list editable="bottom">
                             <field name="partner_ids" invisible="1" />
                             <field name="name" />
@@ -184,7 +184,7 @@
                     <field name="deliverable_documents_ids" widget="many2many"
                         modifiers="{'readonly':[('is_complete_deliverable','=', True)]}"
                         domain="[('partner_id', 'in', project_partner_ids)]"
-                        context="{'default_deliverable_project_id': id, 'default_folder_id': documents_folder_id,'default_partner_id': partner_id}">
+                        context="{'default_project_id': id,'default_partner_id': partner_id}">
                         <list editable="bottom">
                             <field name="partner_ids" invisible="1" />
                             <field name="name" />
