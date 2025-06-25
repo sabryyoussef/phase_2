@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Compliance",
+    "version": "18.0.1.0.0",
     "author": "Beshoy Wageh",
     # 'version': '16.0',
     "depends": [
@@ -21,4 +22,6 @@
         "views/config.xml",
         "views/onboarding.xml",
     ],
+    "installable": True,
+    "application": False,
 }

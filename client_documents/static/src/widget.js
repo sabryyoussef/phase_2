@@ -25,6 +25,6 @@ export class Many2ManyPdfPreview extends Component {
   }
 }
 
-registry
-  .category("view_widgets")
-  .add("many2many_pdf_preview", Many2ManyPdfPreview);
+registry.category("view_widgets").add("many2many_pdf_preview", {
+  component: Many2ManyPdfPreview,
+});

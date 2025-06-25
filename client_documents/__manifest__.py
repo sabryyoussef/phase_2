@@ -3,7 +3,7 @@
     "name": "Client Documents",
     "author": "Beshoy Wageh",
     "category": "Productivity/Documents",
-    "version": "1.0",
+    "version": "18.0.1.0.0",
     # any module necessary for this one to work correctly
     "depends": ["base", "contacts", "project", "stock", "sale_subscription"],
     # always loaded
@@ -27,4 +27,6 @@
             "client_documents/static/src/xml/pdf_preview_template.xml",
         ],
     },
+    "installable": True,
+    "application": False,
 }
