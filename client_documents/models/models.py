@@ -1,4 +1,4 @@
-from odoo import models, fields, api, _
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -116,6 +116,13 @@ class ClientDocuments(models.Model):
         if vals.get("attachment_ids"):
             self.write({"document_create_date": fields.Datetime.today()})
         return res
+
+    def isRequest(self):
+        """
+        Method expected by frontend DocumentsTypeIcon component.
+        Returns False for regular documents (True would be for document requests).
+        """
+        return False
 
 
 class Client(models.Model):
