@@ -77,6 +77,13 @@ class ClientDocuments(models.Model):
         tracking=True,
     )
 
+    # Field expected by frontend DocumentsTypeIcon component
+    is_request = fields.Boolean(
+        string="Is Request",
+        default=False,
+        help="Indicates if this is a document request (False for regular documents)",
+    )
+
     def action_numbers(self):
         docs = self.env["res.partner.document"].sudo().search([])
         for doc in docs:
@@ -120,9 +127,9 @@ class ClientDocuments(models.Model):
     def isRequest(self):
         """
         Method expected by frontend DocumentsTypeIcon component.
-        Returns False for regular documents (True would be for document requests).
+        Returns the value of is_request field.
         """
-        return False
+        return self.is_request
 
 
 class Client(models.Model):
