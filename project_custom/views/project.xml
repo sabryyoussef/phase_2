@@ -303,7 +303,7 @@
                     </group>
                     <field name="compliance_shareholder_ids"
                         modifiers="{'readonly':[('is_complete_compliance','=', True)]}"
-                        context="{'default_project_id': id,'default_documents_folder_id': documents_folder_id,'default_partner_id': hand_partner_id}">
+                        context="{'default_project_id': id,'default_partner_id': hand_partner_id}">
                         <list>
                             <field name="project_id" invisible="1" />
                             <field name="customer_id" invisible="1" />
@@ -340,35 +340,29 @@
                                     <!--                                    <field name="birthday" />-->
                                     <!--                                    <field name="place_of_birth" />-->
                                     <field name="gender" />
-                                    <field name="documents_folder_id" invisible="1" />
                                 </group>
                                 <group modifiers="{'invisible': [('company_type', '=', 'company')]}"
                                     string="Shareholder Information">
                                     <field name="passport" options="{'no_quick_create':True}"
                                         context="{'default_project_id': project_id,
-                                                   'default_folder_id': documents_folder_id,
                                                    'default_partner_id': contact_id}" />
                                     <field name="uae_resident" widget="boolean_toggle" />
                                     <field name="eid_copy" options="{'no_quick_create':True}"
                                         modifiers="{'invisible': [('uae_resident', '!=', True)]}"
                                         context="{'default_project_id': project_id,
-                                                   'default_folder_id': documents_folder_id,
                                                    'default_partner_id': contact_id}" />
                                     <field name="residence_visa_copy"
                                         options="{'no_quick_create':True}"
                                         modifiers="{'invisible': [('uae_resident', '!=', True)]}"
                                         context="{'default_project_id': project_id,
-                                                   'default_folder_id': documents_folder_id,
                                                    'default_partner_id': contact_id}" />
                                     <field name="current_visa" options="{'no_quick_create':True}"
                                         modifiers="{'invisible': [('uae_resident', '=', True)]}"
                                         context="{'default_project_id': project_id,
-                                                   'default_folder_id': documents_folder_id,
                                                    'default_partner_id': contact_id}" />
                                     <field name="entry_stamp" options="{'no_quick_create':True}"
                                         modifiers="{'invisible': [('uae_resident', '=', True)]}"
                                         context="{'default_project_id': project_id,
-                                                   'default_folder_id': documents_folder_id,
                                                    'default_partner_id': contact_id}" />
                                     <field name="apply_visa" widget="boolean_toggle" />
                                 </group>
@@ -383,12 +377,10 @@
                                 <group string="Corporate Shareholder Information">
                                     <field name="trade_license" options="{'no_quick_create':True}"
                                         context="{'default_project_id': project_id,
-                                                   'default_folder_id': documents_folder_id,
                                                    'default_partner_id': contact_id}" />
                                     <field name="memorandum_association"
                                         options="{'no_quick_create':True}"
                                         context="{'default_project_id': project_id,
-                                                   'default_folder_id': documents_folder_id,
                                                    'default_partner_id': contact_id}" />
                                 </group>
                             </group>

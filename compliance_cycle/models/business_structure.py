@@ -73,7 +73,9 @@ class BusinessShareholder(models.Model):
     )
 
     # Document references
-    documents_folder_id = fields.Many2one("documents.folder", string="Documents Folder")
+    # documents_folder_id = fields.Many2one(
+    #     "documents.folder", string="Documents Folder"
+    # )
     passport = fields.Many2one("res.partner.document", string="Passport")
     uae_resident = fields.Boolean(string="UAE Resident")
     eid_copy = fields.Many2one("res.partner.document", string="EID Copy")
