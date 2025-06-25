@@ -98,10 +98,12 @@
                                 modifiers="{'readonly':[('is_complete_hand','=', True)]}" />
                             <label for="preferred_mobile_number" string="Preferred Mobile Number" />
                             <div class="o_row">
-<!--                                <field name="mobile_country_id" class="oe_inline"-->
-<!--                                    placeholder="Add mobile country name"-->
-<!--                                    modifiers="{'readonly':[('is_complete_hand','=', True)]}"-->
-<!--                                    options="{'no_quick_create':True,'no_create_edit':True,'no_create': True}" />-->
+                                <!--                                <field name="mobile_country_id" class="oe_inline"-->
+                                <!--                                    placeholder="Add mobile country name"-->
+                                <!--                                    modifiers="{'readonly':[('is_complete_hand','=', True)]}"-->
+                                <!--
+                                options="{'no_quick_create':True,'no_create_edit':True,'no_create':
+                                True}" />-->
                                 <field name="preferred_mobile_number" widget="phone"
                                     placeholder="Add mobile number"
                                     modifiers="{'readonly':[('is_complete_hand','=', True)]}"
@@ -168,8 +170,8 @@
                             modifiers="{'invisible':[('hand_partner_company_type','!=', 'person')]}">
                             <field name="hand_partner_nationality_id"
                                 modifiers="{'readonly':[('is_complete_hand','=', True)]}" />
-<!--                            <field name="hand_partner_birthday"-->
-<!--                                modifiers="{'readonly':[('is_complete_hand','=', True)]}" />-->
+                            <!--                            <field name="hand_partner_birthday"-->
+                            <!--                                modifiers="{'readonly':[('is_complete_hand','=', True)]}" />-->
                             <field name="hand_partner_place_of_birth"
                                 modifiers="{'readonly':[('is_complete_hand','=', True)]}" />
                             <field name="hand_partner_gender"
@@ -331,12 +333,12 @@
                                 </group>
                                 <group modifiers="{'invisible': [('company_type', '=', 'company')]}"
                                     string="Shareholder Information">
-<!--                                    <field name="first_name" />-->
-<!--                                    <field name="middle_name" />-->
-<!--                                    <field name="last_name" />-->
+                                    <!--                                    <field name="first_name" />-->
+                                    <!--                                    <field name="middle_name" />-->
+                                    <!--                                    <field name="last_name" />-->
                                     <field name="nationality_id" />
-<!--                                    <field name="birthday" />-->
-<!--                                    <field name="place_of_birth" />-->
+                                    <!--                                    <field name="birthday" />-->
+                                    <!--                                    <field name="place_of_birth" />-->
                                     <field name="gender" />
                                     <field name="documents_folder_id" invisible="1" />
                                 </group>
@@ -390,24 +392,6 @@
                                                    'default_partner_id': contact_id}" />
                                 </group>
                             </group>
-                            <notebook>
-                                <page string="Address">
-                                    <field name="address_ids">
-                                        <list editable="bottom">
-                                            <field name="type" />
-                                            <field name="country_id" placeholder="Country"
-                                                required="1"
-                                                options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" />
-                                            <field name="street" placeholder="Street..." />
-                                            <field name="street2" placeholder="Street 2..." />
-                                            <field name="city" placeholder="City" />
-                                            <field name="state_id" placeholder="State"
-                                                options="{'no_open': True, 'no_quick_create': True}" />
-                                            <field name="zip" placeholder="ZIP" />
-                                        </list>
-                                    </field>
-                                </page>
-                            </notebook>
                         </form>
                     </field>
                 </page>
