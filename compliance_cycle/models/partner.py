@@ -6,7 +6,7 @@ class Partner(models.Model):
     _inherit = "res.partner"
 
     compliance_shareholder_ids = fields.One2many(
-        "res.partner.shareholder", "partner_id"
+        "res.partner.business.shareholder", "partner_id"
     )
     partner_address_lines = fields.One2many("res.partner.address", "partner_id")
     business_structure_id = fields.Many2one(
