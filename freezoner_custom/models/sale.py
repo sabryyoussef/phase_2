@@ -625,7 +625,9 @@ class SaleOrder(models.Model):
                         task_data = merged_tasks[task.name]
                         task_data["description"] = task.description
                         task_data["sequence"] = task.sequence
-                        task_data["planned_hours"] = task.planned_hours
+                        task_data["allocated_hours"] = getattr(
+                            task, "allocated_hours", 0.0
+                        )
                         task_data["user_ids"] = task.user_ids.ids
                         task_data["child_ids"] += [
                             self._prepare_child_task_data(child, project)
@@ -659,7 +661,7 @@ class SaleOrder(models.Model):
             "display_project_id": project.id,
             "description": child.description,
             "sequence": child.sequence,
-            "planned_hours": child.planned_hours,
+            "allocated_hours": getattr(child, "allocated_hours", 0.0),
             "user_ids": [(6, 0, child.user_ids.ids)] if child.user_ids else [],
             "checkpoint_ids": [
                 (
@@ -687,7 +689,7 @@ class SaleOrder(models.Model):
             "sale_order_id": rec.id,
             "user_ids": [(6, 0, [rec.user_id.id] + (data["user_ids"] or []))],
             "description": data["description"],
-            "planned_hours": data["planned_hours"],
+            "allocated_hours": data["allocated_hours"],
             "sequence": data["sequence"],
             "child_ids": [
                 (0, 0, self._prepare_child_task_data(child, project))
