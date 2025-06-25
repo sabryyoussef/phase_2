@@ -24,10 +24,14 @@ class Project(models.Model):
         partners = (
             self.env["res.partner"]
             .sudo()
-            .search([("company_type", "=", self.hand_partner_company_type)])
+            .search([("is_company", "=", self.hand_partner_company_type == "company")])
         )
         for p in partners:
-            if p.company_type == self.hand_partner_company_type:
+            # Check if partner type matches the selection
+            partner_is_company = p.is_company
+            if (partner_is_company and self.hand_partner_company_type == "company") or (
+                not partner_is_company and self.hand_partner_company_type == "person"
+            ):
                 lst.append(p.id)
         self.hand_partner_ids = lst
 
@@ -46,7 +50,7 @@ class Project(models.Model):
     hand_partner_id = fields.Many2one(
         "res.partner",
         string="Company Name",
-        domain="[('id','in', hand_partner_ids), ('company_type','=','company')]",
+        domain="[('id','in', hand_partner_ids), ('is_company','=', True)]",
     )
     hand_legal_type = fields.Selection(
         string="Legal Entity/Type",
@@ -191,9 +195,6 @@ class Project(models.Model):
     )
     is_complete_return_hand = fields.Boolean(string="Handover Complete", copy=False)
     is_confirm_hand = fields.Boolean(string="Handover Confirm", copy=False)
-    is_complete_return_compliance = fields.Boolean(
-        string="Compliance Complete", copy=False
-    )
     is_complete_return_compliance = fields.Boolean(
         string="Compliance Complete", copy=False
     )

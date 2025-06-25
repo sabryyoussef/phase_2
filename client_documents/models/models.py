@@ -81,7 +81,7 @@ class ClientDocuments(models.Model):
     is_request = fields.Boolean(
         string="Is Request",
         default=False,
-        help="Indicates if this is a document request (False for regular documents)",
+        help="Indicates if this is a document request " "(False for regular documents)",
     )
 
     def action_numbers(self):
@@ -129,6 +129,7 @@ class ClientDocuments(models.Model):
         Method expected by frontend DocumentsTypeIcon component.
         Returns the value of is_request field.
         """
+        self.ensure_one()
         return self.is_request
 
 
@@ -150,9 +151,9 @@ class Client(models.Model):
             "type": "ir.actions.act_window",
             "domain": [("partner_id", "=", self.id)],
             "context": {"default_partner_id": self.id},
-            "view_mode": "tree,kanban,form",
+            "view_mode": "list,kanban,form",
             "name": f"{self.name}'s Documents",
-            # 'view_ids': [(kanban_view, 'kanban'), (tree_view, 'tree'), (False, 'form')],
+            # Note: view_ids format: [(kanban_view, 'kanban'), (tree_view, 'tree'), (False, 'form')]
             "res_model": "res.partner.document",
         }
         return action

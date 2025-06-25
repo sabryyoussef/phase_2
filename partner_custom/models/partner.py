@@ -1,5 +1,5 @@
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError, UserError
+from odoo.exceptions import UserError, ValidationError
 
 
 class Partner(models.Model):
@@ -218,7 +218,7 @@ class Partner(models.Model):
         for rec in self:
             partners = []
             all_partners = (
-                self.env["res.partner"].sudo().search([("company_type", "=", "person")])
+                self.env["res.partner"].sudo().search([("is_company", "=", False)])
             )
             for partner in all_partners:
                 if str(partner.parent_id.id) == str(rec.id) or str(
