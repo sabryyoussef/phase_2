@@ -658,7 +658,6 @@ class SaleOrder(models.Model):
             "is_subtask": True,
             "name": child.name,
             "project_id": project.id,
-            "display_project_id": project.id,
             "description": child.description,
             "sequence": child.sequence,
             "allocated_hours": getattr(child, "allocated_hours", 0.0),
@@ -685,7 +684,6 @@ class SaleOrder(models.Model):
         return {
             "name": name,
             "project_id": project.id,
-            "display_project_id": project.id,
             "sale_order_id": rec.id,
             "user_ids": [(6, 0, [rec.user_id.id] + (data["user_ids"] or []))],
             "description": data["description"],
