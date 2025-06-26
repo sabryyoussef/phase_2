@@ -134,15 +134,18 @@ class Return(models.TransientModel):
                 {
                     "name": self.name,
                     "folder_id": folder_id,
-                    "project_id": project_id,
-                    "partner_id": partner_id,
+                    "requestee_id": partner_id,
                 }
             )
+
+            # Step 2: Set project_id separately if the inherited model supports it
+            if hasattr(wizard, "project_id") and project_id:
+                wizard.project_id = project_id
 
             # Debugging to confirm record creation
             print(f"Created Wizard Record ID: {wizard.id}")
 
-            # Step 2: Open the newly created record in the form view
+            # Step 3: Open the newly created record in the form view
             return {
                 "name": "Request Document",
                 "type": "ir.actions.act_window",
