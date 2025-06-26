@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
 import { patch } from "@web/core/utils/patch";
-import { DocumentsTypeIcon } from "@documents/components/documents_type_icon/documents_type_icon";
+import { DocumentsTypeIcon } from "@documents/views/hooks";
 
 // Patch the existing DocumentsTypeIcon component
 patch(DocumentsTypeIcon.prototype, {
