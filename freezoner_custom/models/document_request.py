@@ -93,13 +93,6 @@ class DocumentRequest(models.TransientModel):
         help="Number of reminders sent",
     )
 
-    issue_date = fields.Date(
-        string="Issue Date",
-        store=True,
-        default=fields.Date.today,
-        help="Date when the document was issued or created",
-    )
-
     @api.depends("project_id")
     def _compute_project_partners(self):
         for rec in self:
@@ -169,31 +162,27 @@ class DocumentRequest(models.TransientModel):
         """Override the original request_document method with enhanced functionality"""
         self.ensure_one()
 
-        # Automatically set issue_date if not provided
-        if not self.issue_date:
-            self.issue_date = fields.Date.today()
-
         # Validate request
         if not self.partner_id:
             raise UserError(_("Please select a partner for the document request."))
-        if not self.type_id:
-            raise UserError(_("Please select a document type."))
+        # Note: type_id is optional - user can select it or leave blank
 
         # Create the document request
         document = super(DocumentRequest, self).request_document()
 
         # Update document with additional information
         if document and self.project_id:
-            document.write(
-                {
-                    "project_id": self.project_id.id,
-                    "type_id": self.type_id.id,
-                    "deadline": self.deadline,
-                    "priority": self.priority,
-                    "notes": self.notes,
-                    "request_status": "sent",
-                }
-            )
+            vals_to_write = {"project_id": self.project_id.id, "request_status": "sent"}
+            if self.type_id:
+                vals_to_write["type_id"] = self.type_id.id
+            if self.deadline:
+                vals_to_write["deadline"] = self.deadline
+            if self.priority:
+                vals_to_write["priority"] = self.priority
+            if self.notes:
+                vals_to_write["notes"] = self.notes
+
+            document.write(vals_to_write)
 
             # Send notification
             self._send_document_request_notification(document)
