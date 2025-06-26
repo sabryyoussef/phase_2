@@ -1,6 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Define views first -->
+    <!-- Simple Document Views - No problematic widgets -->
+    <record id="simple_documents_tree_view" model="ir.ui.view">
+        <field name="name">Simple Documents Tree</field>
+        <field name="model">documents.document</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Document Name" />
+                <field name="partner_id" string="Partner" />
+                <field name="project_id" string="Project" />
+                <field name="folder_id" string="Folder" />
+                <field name="owner_id" string="Owner" />
+                <field name="create_date" string="Created" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="simple_documents_form_view" model="ir.ui.view">
+        <field name="name">Simple Documents Form</field>
+        <field name="model">documents.document</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="partner_id" />
+                        <field name="project_id" />
+                        <field name="folder_id" />
+                        <field name="owner_id" />
+                        <field name="datas" filename="name" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Simple action using only tree and form views -->
+    <record id="simple_documents_action" model="ir.actions.act_window">
+        <field name="name">Project Documents</field>
+        <field name="res_model">documents.document</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids"
+            eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('simple_documents_tree_view')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('simple_documents_form_view')})
+        ]" />
+        <field name="domain">[('project_id', '!=', False)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No documents found for projects
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu item pointing to simple action -->
+    <menuitem id="menu_project_documents_simple"
+        name="Project Documents"
+        parent="project.menu_main_pm"
+        action="simple_documents_action"
+        sequence="10" />
+
+    <!-- COMMENTED OUT - Complex views that cause DocumentsTypeIcon issues -->
+    <!--
     <record id="documents_kanban_view" model="ir.ui.view">
         <field name="name">documents.document.kanban</field>
         <field name="model">documents.document</field>
@@ -14,7 +78,8 @@
                             class="oe_kanban_global_click o_kanban_record_has_image_fill o_document_card">
                             <i class="fa fa-file-text-o me-2" title="Document" />
                             <div class="o_kanban_image_fill_left d-none d-md-block"
-                                t-attf-style="background-image:url(#{kanban_image('documents.document', 'thumbnail', record.id.raw_value)})">
+                                t-attf-style="background-image:url(#{kanban_image('documents.document', 'thumbnail',
+    record.id.raw_value)})">
                                 <img class="o_kanban_image_inner_pic"
                                     t-att-src="kanban_image('documents.document', 'thumbnail', record.id.raw_value)"
                                     alt="Document thumbnail" />
@@ -56,7 +121,6 @@
         </field>
     </record>
 
-    <!-- Then reference them in the action -->
     <record id="documents.document_action" model="ir.actions.act_window">
         <field name="view_mode">kanban,list,form</field>
         <field name="view_ids"
@@ -66,7 +130,9 @@
             (0, 0, {'view_mode': 'list', 'view_id': ref('documents_list_view')})
         ]" />
     </record>
+    -->
 
+    <!-- Keep the form view inheritance as it doesn't cause issues -->
     <record id="document_form_view" model="ir.ui.view">
         <field name="name">documents.document.form</field>
         <field name="model">documents.document</field>
