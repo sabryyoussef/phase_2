@@ -151,6 +151,9 @@ class Return(models.TransientModel):
                 "type": "ir.actions.act_window",
                 "res_model": "documents.request_wizard",
                 "view_mode": "form",
+                "view_id": self.env.ref(
+                    "freezoner_custom.documents_request_wizard_simple_form_view"
+                ).id,
                 "res_id": wizard.id,  # Open the specific record
                 "target": "new",
             }
