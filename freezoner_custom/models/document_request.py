@@ -103,6 +103,7 @@ class DocumentRequest(models.TransientModel):
     issue_date = fields.Date(
         string="Issue Date",
         tracking=True,
+        store=True,
         default=fields.Date.today,
         help="Date when the document was issued or created",
     )
