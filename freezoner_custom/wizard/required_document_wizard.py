@@ -123,7 +123,11 @@ class Return(models.TransientModel):
                 project.documents_folder_id.id if project.documents_folder_id else False
             )
             project_id = project.id if project else False
-            owner_id = rec.user_id.id if rec.user_id else False
+            partner_id = (
+                rec.user_id.partner_id.id
+                if rec.user_id and rec.user_id.partner_id
+                else False
+            )
 
             # Step 1: Create the record in 'documents.request_wizard'
             wizard = self.env["documents.request_wizard"].create(
@@ -131,7 +135,7 @@ class Return(models.TransientModel):
                     "name": self.name,
                     "folder_id": folder_id,
                     "project_id": project_id,
-                    "owner_id": owner_id,
+                    "partner_id": partner_id,
                 }
             )
 
