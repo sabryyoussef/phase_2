@@ -169,6 +169,10 @@ class DocumentRequest(models.TransientModel):
         """Override the original request_document method with enhanced functionality"""
         self.ensure_one()
 
+        # Automatically set issue_date if not provided
+        if not self.issue_date:
+            self.issue_date = fields.Date.today()
+
         # Validate request
         if not self.partner_id:
             raise UserError(_("Please select a partner for the document request."))

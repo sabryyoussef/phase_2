@@ -36,9 +36,6 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
-                    <div class="oe_title">
-                        <h1>Document Request Form - Debug Version</h1>
-                    </div>
                     <group>
                         <group>
                             <field name="name" required="1" />
@@ -50,14 +47,7 @@
                             <field name="project_id"
                                 invisible="context.get('default_project_id', False)" />
                             <field name="type_id" string="Document Type" />
-                            <field name="issue_date" string="Issue Date" required="0" force_save="1" />
-                            <field name="deadline" string="Deadline" invisible="0" />
-                            <field name="priority" string="Priority" />
                         </group>
-                    </group>
-                    <group string="Debug - Available Fields" invisible="0">
-                        <field name="notes" string="Notes" />
-                        <field name="request_status" string="Status" />
                     </group>
                     <group string="Additional Options" invisible="1">
                         <field name="activity_type_id" />
