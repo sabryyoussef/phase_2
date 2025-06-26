@@ -56,6 +56,7 @@
     ],
     "assets": {
         "web.assets_backend": [
+            ("after", "documents.assets_documents_components"),
             "freezoner_custom/static/src/js/fix_documents.js",
         ],
     },

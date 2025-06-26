@@ -1,27 +1,24 @@
 /** @odoo-module **/
 
-import { registry } from "@web/core/registry";
-import { Component, xml } from "@odoo/owl";
+import { patch } from "@web/core/utils/patch";
+import { DocumentsTypeIcon } from "@documents/components/documents_type_icon/documents_type_icon";
 
-// Simple replacement for DocumentsTypeIcon
-class SimpleDocumentsTypeIcon extends Component {
-  static template = xml`
-        <div class="o_documents_type_icon">
-            <i class="fa fa-file-text-o"/>
-        </div>
-    `;
-
-  static props = {
-    record: { type: Object, optional: true },
-    readonly: { type: Boolean, optional: true },
-    value: { type: [Boolean, String, Number], optional: true },
-  };
-}
-
-// Register our simple replacement
-registry.category("fields").add("documents_type_icon", {
-  component: SimpleDocumentsTypeIcon,
-  force: true,
+// Patch the existing DocumentsTypeIcon component
+patch(DocumentsTypeIcon.prototype, {
+  /**
+   * Override isRequest to safely handle missing method
+   */
+  isRequest() {
+    try {
+      const record = this.props.record;
+      return record && typeof record.isRequest === "function"
+        ? record.isRequest()
+        : false;
+    } catch (error) {
+      console.log("isRequest method not available, returning false");
+      return false;
+    }
+  },
 });
 
-console.log("Simple DocumentsTypeIcon replacement loaded successfully");
+console.log("DocumentsTypeIcon patch applied successfully");
