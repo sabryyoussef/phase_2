@@ -18,7 +18,6 @@ class DocumentRequest(models.TransientModel):
     project_id = fields.Many2one(
         "project.project",
         string="Project",
-        tracking=True,
         help="Related project for the document request",
     )
 
@@ -36,21 +35,18 @@ class DocumentRequest(models.TransientModel):
         "res.partner",
         string="Requested Partner",
         domain="[('id', 'in', partner_ids)]",
-        tracking=True,
         help="Partner to request the document from",
     )
 
     type_id = fields.Many2one(
         "res.partner.document.type",
         string="Document Type",
-        tracking=True,
         required=False,
         help="Type of document being requested",
     )
 
     deadline = fields.Date(
         string="Request Deadline",
-        tracking=True,
         default=lambda self: fields.Date.today() + relativedelta(days=7),
         help="Deadline for document submission",
     )
@@ -59,13 +55,11 @@ class DocumentRequest(models.TransientModel):
         [("0", "Low"), ("1", "Normal"), ("2", "High"), ("3", "Urgent")],
         string="Priority",
         default="1",
-        tracking=True,
         help="Priority level of the document request",
     )
 
     notes = fields.Text(
         string="Additional Notes",
-        tracking=True,
         help="Additional information about the document request",
     )
 
@@ -79,7 +73,6 @@ class DocumentRequest(models.TransientModel):
         ],
         string="Request Status",
         default="draft",
-        tracking=True,
         help="Current status of the document request",
     )
 
@@ -90,19 +83,18 @@ class DocumentRequest(models.TransientModel):
     )
 
     last_reminder_date = fields.Datetime(
-        string="Last Reminder", tracking=True, help="Date of the last reminder sent"
+        string="Last Reminder",
+        help="Date of the last reminder sent",
     )
 
     reminder_count = fields.Integer(
         string="Reminder Count",
         default=0,
-        tracking=True,
         help="Number of reminders sent",
     )
 
     issue_date = fields.Date(
         string="Issue Date",
-        tracking=True,
         store=True,
         default=fields.Date.today,
         help="Date when the document was issued or created",
