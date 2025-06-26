@@ -130,6 +130,7 @@
                                 required="1" />
                             <field name="document_id"
                                 options="{'no_quick_create':True,'no_create_edit':True,'no_create': True}"
+                                domain="[('name', '!=', False)]"
                                 required="1" />
                             <field name="name" required="1" />
                             <field name="issue_date" required="1" />
@@ -151,6 +152,7 @@
                             <field name="attachment_ids" widget="many2many_binary" class="oe_inline" />
                             <field name="document_id"
                                 options="{'no_quick_create':True,'no_create_edit':True,'no_create': True}"
+                                domain="[('name', '!=', False)]"
                                 required="1" />
                             <field name="name" required="0" />
                             <field name="issue_date" required="0" />
@@ -176,6 +178,7 @@
                                 required="1" />
                             <field name="document_id"
                                 options="{'no_quick_create':True,'no_create_edit':True,'no_create': True}"
+                                domain="[('name', '!=', False)]"
                                 required="1" />
                             <field name="name" required="1" />
                             <field name="issue_date" required="1" />
@@ -195,6 +198,7 @@
                                 required="1" />
                             <field name="document_id"
                                 options="{'no_quick_create':True,'no_create_edit':True,'no_create': True}"
+                                domain="[('name', '!=', False)]"
                                 required="1" />
                             <field name="name" required="1" />
                             <field name="issue_date" required="1" />
