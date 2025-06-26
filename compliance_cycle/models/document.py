@@ -6,6 +6,18 @@ class Documents(models.Model):
 
     onboarding_id = fields.Many2one("initial.client.onboarding", string="Onboarding")
 
+    # Field expected by frontend DocumentsTypeIcon component
+    is_request = fields.Boolean(
+        string="Is Request",
+        default=False,
+        help="Indicates if this is a document request",
+    )
+
+    def isRequest(self):
+        """Method expected by frontend DocumentsTypeIcon component."""
+        self.ensure_one()
+        return self.is_request
+
 
 class ProductDocuments(models.Model):
     _inherit = "product.template.required.documents"
