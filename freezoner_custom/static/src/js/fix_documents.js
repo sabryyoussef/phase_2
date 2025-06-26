@@ -1,33 +1,27 @@
 /** @odoo-module **/
 
 import { registry } from "@web/core/registry";
-import { Component } from "@odoo/owl";
-import { DocumentsTypeIcon } from "@documents/components/documents_type_icon/documents_type_icon";
+import { Component, xml } from "@odoo/owl";
 
-// Override DocumentsTypeIcon to fix isRequest error
-class FixedDocumentsTypeIcon extends DocumentsTypeIcon {
-  setup() {
-    super.setup();
-  }
+// Simple replacement for DocumentsTypeIcon
+class SimpleDocumentsTypeIcon extends Component {
+  static template = xml`
+        <div class="o_documents_type_icon">
+            <i class="fa fa-file-text-o"/>
+        </div>
+    `;
 
-  get isRequest() {
-    // Safely check if isRequest method exists and call it, otherwise return false
-    try {
-      const record = this.props.record;
-      return record && typeof record.isRequest === "function"
-        ? record.isRequest()
-        : false;
-    } catch (error) {
-      console.log("isRequest method not available, returning false");
-      return false;
-    }
-  }
+  static props = {
+    record: { type: Object, optional: true },
+    readonly: { type: Boolean, optional: true },
+    value: { type: [Boolean, String, Number], optional: true },
+  };
 }
 
-// Register the fixed widget to override the original
+// Register our simple replacement
 registry.category("fields").add("documents_type_icon", {
-  component: FixedDocumentsTypeIcon,
+  component: SimpleDocumentsTypeIcon,
   force: true,
 });
 
-console.log("Fixed DocumentsTypeIcon widget loaded successfully");
+console.log("Simple DocumentsTypeIcon replacement loaded successfully");
