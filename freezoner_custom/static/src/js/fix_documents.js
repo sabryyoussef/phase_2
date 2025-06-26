@@ -1,11 +1,16 @@
 /** @odoo-module **/
 
 import { registry } from "@web/core/registry";
-import { Component } from "@odoo/owl";
+import { Component, xml } from "@odoo/owl";
 
-// Simple replacement for DocumentsTypeIcon
-class SimpleDocumentsTypeIcon extends Component {
-  static template = "documents.DocumentsTypeIcon";
+// Create a new simple document icon component
+class SafeDocumentsTypeIcon extends Component {
+  static template = xml`
+        <div class="o_documents_type_icon">
+            <i class="fa fa-file-text-o"/>
+        </div>
+    `;
+
   static props = {
     record: { type: Object, optional: true },
     readonly: { type: Boolean, optional: true },
@@ -25,9 +30,9 @@ class SimpleDocumentsTypeIcon extends Component {
   }
 }
 
-// Register our replacement
-registry.category("fields").add("documents_type_icon", {
-  component: SimpleDocumentsTypeIcon,
+// Register with a unique name
+registry.category("fields").add("safe_documents_type_icon", {
+  component: SafeDocumentsTypeIcon,
 });
 
-console.log("Simple DocumentsTypeIcon replacement loaded successfully");
+console.log("Safe DocumentsTypeIcon component loaded successfully");

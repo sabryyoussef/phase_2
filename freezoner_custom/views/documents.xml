@@ -261,4 +261,26 @@
     <!--        </field>-->
     <!--    </record>-->
 
+    <record id="documents_kanban_inherit" model="ir.ui.view">
+        <field name="name">documents.document.kanban.inherit</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.document_view_kanban" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@widget='documents_type_icon']" position="attributes">
+                <attribute name="widget">safe_documents_type_icon</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="documents_list_inherit" model="ir.ui.view">
+        <field name="name">documents.document.list.inherit</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.documents_view_list" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@widget='documents_type_icon']" position="attributes">
+                <attribute name="widget">safe_documents_type_icon</attribute>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>
