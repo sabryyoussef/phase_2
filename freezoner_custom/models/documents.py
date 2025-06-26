@@ -221,7 +221,12 @@ class Documents(models.Model):
     project_id = fields.Many2one("project.project")
     required_project_id = fields.Many2one("project.project")
     deliverable_project_id = fields.Many2one("project.project")
-    issue_date = fields.Date(required=True, tracking=True)
+    issue_date = fields.Date(
+        required=False,
+        default=fields.Date.today,
+        tracking=True,
+        help="Date when the document was issued",
+    )
     type_id = fields.Many2one(comodel_name="res.partner.document.type", tracking=True)
     expiration_date = fields.Date(tracking=True)
     partner_ids = fields.Many2many(

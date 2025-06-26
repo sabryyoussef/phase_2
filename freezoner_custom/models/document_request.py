@@ -1,15 +1,13 @@
-from datetime import datetime
-
 from dateutil.relativedelta import relativedelta
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
-from odoo.tools.misc import clean_context
 
 
 class DocumentRequest(models.TransientModel):
     """
     Document Request Wizard
-    Enhanced document request wizard with project integration and improved partner management
+    Enhanced document request wizard with project integration and improved
+    partner management
     """
 
     _inherit = "documents.request_wizard"
@@ -43,6 +41,13 @@ class DocumentRequest(models.TransientModel):
         string="Document Type",
         required=False,
         help="Type of document being requested",
+    )
+
+    # Add issue_date field required by client_documents module
+    issue_date = fields.Date(
+        string="Issue Date",
+        default=fields.Date.today,
+        help="Date when the document was issued",
     )
 
     deadline = fields.Date(
@@ -93,6 +98,24 @@ class DocumentRequest(models.TransientModel):
         help="Number of reminders sent",
     )
 
+    # Override base model required fields to make them optional
+    requestee_id = fields.Many2one(
+        "res.partner",
+        string="Request From",
+        required=False,  # Make this optional instead of required
+        help="Partner to request the document from",
+    )
+
+    activity_type_id = fields.Many2one(
+        "mail.activity.type",
+        string="Activity type",
+        required=False,  # Make this optional instead of required
+        default=lambda self: self.env.ref(
+            "documents.mail_documents_activity_data_md", raise_if_not_found=False
+        ),
+        domain="[('category', '=', 'upload_file')]",
+    )
+
     @api.depends("project_id")
     def _compute_project_partners(self):
         for rec in self:
@@ -134,7 +157,7 @@ class DocumentRequest(models.TransientModel):
             if rec.deadline and rec.priority == "3":  # Urgent priority
                 if rec.deadline > fields.Date.today() + relativedelta(days=3):
                     raise ValidationError(
-                        _("Urgent requests should have a deadline within 3 days.")
+                        _("Urgent requests should have a deadline " "within 3 days.")
                     )
 
     def action_send_reminder(self):
@@ -159,12 +182,25 @@ class DocumentRequest(models.TransientModel):
         return True
 
     def request_document(self):
-        """Override the original request_document method with enhanced functionality"""
+        """
+        Override the original request_document method with enhanced
+        functionality
+        """
         self.ensure_one()
 
-        # Validate request
-        if not self.partner_id:
-            raise UserError(_("Please select a partner for the document request."))
+        # Auto-set requestee_id if not provided (use partner_id or project
+        # partner)
+        if not self.requestee_id:
+            if self.partner_id:
+                self.requestee_id = self.partner_id
+            elif self.project_id and self.project_id.partner_id:
+                self.requestee_id = self.project_id.partner_id
+            else:
+                raise UserError(_("Please select who to request the document from."))
+
+        # Validate request - now only check if we have a requestee
+        if not self.requestee_id:
+            raise UserError(_("Please select who to request the document from."))
         # Note: type_id is optional - user can select it or leave blank
 
         # Create the document request
@@ -206,7 +242,10 @@ class DocumentRequest(models.TransientModel):
             self.write(
                 {
                     "request_status": "cancelled",
-                    "notes": f"{self.notes or ''}\nCancelled by {self.env.user.name} on {fields.Datetime.now()}",
+                    "notes": (
+                        f"{self.notes or ''}\nCancelled by "
+                        f"{self.env.user.name} on {fields.Datetime.now()}"
+                    ),
                 }
             )
         return True
@@ -218,7 +257,10 @@ class DocumentRequest(models.TransientModel):
             self.write(
                 {
                     "request_status": "received",
-                    "notes": f"{self.notes or ''}\nDocument received on {fields.Datetime.now()}",
+                    "notes": (
+                        f"{self.notes or ''}\nDocument received on "
+                        f"{fields.Datetime.now()}"
+                    ),
                 }
             )
         return True

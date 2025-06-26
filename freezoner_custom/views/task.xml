@@ -133,7 +133,7 @@
                                 domain="[('name', '!=', False)]"
                                 required="1" />
                             <field name="name" required="1" />
-                            <field name="issue_date" required="1" />
+                            <field name="issue_date" />
                             <field name="is_required_expiration" />
                             <field name="expiration_date"
                                 modifiers="{'required': [('is_required_expiration', '=', True)]}" />
@@ -181,7 +181,7 @@
                                 domain="[('name', '!=', False)]"
                                 required="1" />
                             <field name="name" required="1" />
-                            <field name="issue_date" required="1" />
+                            <field name="issue_date" />
                             <field name="is_required_expiration" />
                             <field name="expiration_date"
                                 modifiers="{'required': [('is_required_expiration', '=', True)]}" />
@@ -201,7 +201,7 @@
                                 domain="[('name', '!=', False)]"
                                 required="1" />
                             <field name="name" required="1" />
-                            <field name="issue_date" required="1" />
+                            <field name="issue_date" />
                             <field name="is_required_expiration" />
                             <field name="expiration_date"
                                 modifiers="{'required': [('is_required_expiration', '=', True)]}" />

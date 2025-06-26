@@ -146,7 +146,7 @@
                                         required="1" />
                                     <field name="document_id" required="1" />
                                     <field name="name" required="1" />
-                                    <field name="issue_date" required="1" />
+                                    <field name="issue_date" />
                                     <field name="is_required_expiration" />
                                     <field name="expiration_date"
                                         options="{'required': [('is_required_expiration', '=', True)]}" />
