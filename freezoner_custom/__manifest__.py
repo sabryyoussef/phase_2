@@ -19,7 +19,6 @@
         "crm",
         "cabinet_directory",
         "mass_mailing",
-        "documents_project",
     ],
     "data": [
         "security/ir.model.access.csv",
@@ -56,12 +55,7 @@
     ],
     "assets": {
         "web.assets_backend": [
-            ("include", "documents.assets_documents_components"),
-            (
-                "after",
-                "documents.assets_documents_components",
-                "freezoner_custom/static/src/js/fix_documents.js",
-            ),
+            "freezoner_custom/static/src/js/fix_documents.js",
         ],
     },
     "installable": True,
