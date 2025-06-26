@@ -53,11 +53,11 @@
         "wizard/sale_crm.xml",
         "wizard/update_fields.xml",
     ],
-    "assets": {
-        "web.assets_backend": [
-            "freezoner_custom/static/src/js/fix_documents.js",
-        ],
-    },
+    # "assets": {
+    #     "web.assets_backend": [
+    #         "freezoner_custom/static/src/js/fix_documents.js",
+    #     ],
+    # },
     "installable": True,
     "application": False,
     "auto_install": False,
