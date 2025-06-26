@@ -57,7 +57,7 @@
                         <button class="oe_stat_button" name="action_view_document" type="object"
                             icon="fa-file-text-o" options="{'invisible':[('document_ids','=',[])]}">
                             <field string="Documents" name="document_count" widget="statinfo" />
-                            <field name="document_ids" invisible="1" />
+                            <!-- <field name="document_ids" invisible="1" /> -->
                         </button>
                     </div>
                     <div class="oe_title">

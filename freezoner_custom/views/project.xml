@@ -267,7 +267,7 @@
                 <button class="oe_stat_button" name="action_view_document" type="object"
                     modifiers="{'invisible':[('document_ids','=',[]),('required_documents_ids','=',[]),('deliverable_documents_ids','=',[])]}"
                     string="View Documents" icon="fa-file-text-o">
-                    <field name="document_ids" invisible="1" />
+                    <!-- <field name="document_ids" invisible="1" /> -->
                 </button>
                 <button class="oe_stat_button" name="action_view_subtasks" type="object"
                     icon="fa-edit" modifiers="{'invisible':[('sub_tasks_ids','=',[])]}">

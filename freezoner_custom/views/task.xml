@@ -89,7 +89,7 @@
                 <button class="oe_stat_button" name="action_view_document" type="object"
                     icon="fa-file-text-o" modifiers="{'invisible':[('document_ids','=',[])]}">
                     <field string="Documents" name="document_count" widget="statinfo" />
-                    <field name="document_ids" invisible="1" />
+                    <!-- <field name="document_ids" invisible="1" /> -->
                 </button>
             </xpath>
             <xpath expr="//field[@name='stage_id']" position="replace">
