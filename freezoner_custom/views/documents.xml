@@ -267,8 +267,8 @@
         <field name="model">documents.document</field>
         <field name="inherit_id" ref="documents.document_view_kanban" />
         <field name="arch" type="xml">
-            <xpath expr="//field[@widget='documents_type_icon']" position="replace">
-                <i class="fa fa-file-text-o" />
+            <xpath expr="//div[hasclass('o_kanban_record_title')]" position="before">
+                <i class="fa fa-file-text-o me-2" />
             </xpath>
         </field>
     </record>
@@ -278,8 +278,8 @@
         <field name="model">documents.document</field>
         <field name="inherit_id" ref="documents.documents_view_list" />
         <field name="arch" type="xml">
-            <xpath expr="//field[@widget='documents_type_icon']" position="replace">
-                <i class="fa fa-file-text-o" />
+            <xpath expr="//field[@name='name']" position="before">
+                <i class="fa fa-file-text-o me-2" />
             </xpath>
         </field>
     </record>
