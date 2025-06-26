@@ -100,6 +100,13 @@ class DocumentRequest(models.TransientModel):
         help="Number of reminders sent",
     )
 
+    issue_date = fields.Date(
+        string="Issue Date",
+        tracking=True,
+        default=fields.Date.today,
+        help="Date when the document was issued or created",
+    )
+
     @api.depends("project_id")
     def _compute_project_partners(self):
         for rec in self:

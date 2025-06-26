@@ -47,6 +47,7 @@
                             <field name="project_id"
                                 invisible="context.get('default_project_id', False)" />
                             <field name="type_id" string="Document Type" />
+                            <field name="issue_date" />
                         </group>
                     </group>
                     <group string="Additional Options" invisible="1">
