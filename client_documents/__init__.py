@@ -18,6 +18,38 @@ def post_init_hook(cr, registry=None):
     
     env = api.Environment(cr, SUPERUSER_ID, {})
     
+    # Fix cron job issue with numbercall field
+    try:
+        cron_job = env['ir.cron'].search([('id', '=', 'client_documents.client_documents_expiration_check')])
+        if cron_job:
+            print(f"🔧 Found cron job: {cron_job.name}")
+            
+            # Check if it has the problematic numbercall field
+            if hasattr(cron_job, 'numbercall'):
+                print("❌ Cron job has numbercall field - removing it")
+                # Remove the numbercall field from the record
+                cron_job.write({'numbercall': False})
+                print("✅ Removed numbercall field")
+            else:
+                print("✅ Cron job doesn't have numbercall field")
+                
+            # Update the cron job with correct fields
+            cron_job.write({
+                'name': 'Check For Client\'s Expired Documents',
+                'model_id': env.ref('client_documents.model_res_partner_document').id,
+                'state': 'code',
+                'active': True,
+                'code': 'model.check_for_expiration()',
+                'interval_number': 1,
+                'interval_type': 'days',
+                'priority': 5,
+            })
+            print("✅ Updated cron job with correct fields")
+        else:
+            print("📝 Cron job not found - will be created during data loading")
+    except Exception as e:
+        print(f"⚠️ Error fixing cron job: {e}")
+    
     # Check if demo data installation is tracked
     demo_installed_param = env['ir.config_parameter'].sudo().search([
         ('key', '=', 'client_documents.demo_data_installed')

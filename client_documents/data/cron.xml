@@ -4,11 +4,11 @@
             <field name="name">Check For Client's Expired Documents</field>
             <field name="model_id" ref="model_res_partner_document"/>
             <field name="state">code</field>
-            <field name="active">1</field>
+            <field name="active">True</field>
             <field name="code">model.check_for_expiration()</field>
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
-            <field name="numbercall">-1</field>
+            <field name="priority">5</field>
         </record>
 
     </data>
