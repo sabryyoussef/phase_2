@@ -6,7 +6,7 @@ class CabinetDirectory(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char()
-    work_location_id = fields.Many2one('hr.work.location', string='Work Location')
-    user_id = fields.Many2one('res.users', string='Responsible Person')
+    work_location_id = fields.Many2one('hr.work.location', string='Work Location', ondelete='set null')
+    user_id = fields.Many2one('res.users', string='Responsible Person', ondelete='set null')
     directory_ids = fields.One2many("directory.folder",'cabinet_id',string="Directory Folders")
 

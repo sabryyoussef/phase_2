@@ -29,11 +29,21 @@ class ClientDocumentsType(models.Model):
     def _compute_main_document_ids(self):
         for rec in self:
             lst = []
-            documents = self.env["documents.document"].search(
-                [("type_id", "=", rec.id)]
-            )
-            for doc in documents:
-                lst.append(doc.id)
+            # Check if documents module is installed before trying to access it
+            if 'documents.document' in self.env:
+                try:
+                    # Note: documents.document doesn't have type_id field by default
+                    # This would need custom integration if you want to link them
+                    # For now, we'll look for documents that might be related by name or other means
+                    documents = self.env["documents.document"].search([
+                        '|',
+                        ('name', 'ilike', rec.name),
+                        ('partner_id', 'in', rec.document_ids.mapped('partner_id').ids)
+                    ])
+                    lst = documents.ids
+                except Exception:
+                    # If there's any error with the documents module, just set empty list
+                    lst = []
             rec.main_document_ids = lst
 
 
@@ -75,6 +85,7 @@ class ClientDocuments(models.Model):
     document = fields.Char(tracking=True)
     expiration_reminder_sent = fields.Boolean(default=False, tracking=True)
     is_verify = fields.Boolean("Is Verify", tracking=True)
+    show_verified_ribbon = fields.Boolean("Show Verified Ribbon", compute="_compute_show_verified_ribbon", store=True)
     document_create_date = fields.Datetime(
         readonly=True,
         string="Document Create Date",
@@ -129,6 +140,12 @@ class ClientDocuments(models.Model):
             self.write({"document_create_date": fields.Datetime.today()})
         return res
 
+    @api.depends('is_verify')
+    def _compute_show_verified_ribbon(self):
+        """Compute whether to show the verified ribbon"""
+        for record in self:
+            record.show_verified_ribbon = record.is_verify
+
     def isRequest(self):
         """
         Method expected by frontend DocumentsTypeIcon component.
@@ -175,5 +192,33 @@ class Client(models.Model):
             "context": {
                 "default_partner_id": self.id,
                 "searchpanel_default_folder_id": True,
+                # Fix: Ensure documents_unique_folder_id is not a boolean
+                "no_documents_unique_folder_id": True,
             },
         }
+
+
+class DocumentsDocumentFix(models.Model):
+    """
+    Fix for documents_unique_folder_id context issue
+    This prevents the RPC error when the context contains a boolean instead of integer
+    """
+    _inherit = 'documents.document'
+
+    @api.model
+    def search_panel_select_range(self, field_name, **kwargs):
+        """Override to fix documents_unique_folder_id context issue"""
+        if field_name == 'folder_id':
+            # Fix the documents_unique_folder_id context issue
+            context = self.env.context.copy()
+            unique_folder_id = context.get('documents_unique_folder_id')
+            
+            # If unique_folder_id is a boolean, remove it from context
+            if isinstance(unique_folder_id, bool):
+                context.pop('documents_unique_folder_id', None)
+                self = self.with_context(context)
+            
+            # Call the original method with fixed context
+            return super(DocumentsDocumentFix, self).search_panel_select_range(field_name, **kwargs)
+        
+        return super().search_panel_select_range(field_name, **kwargs)

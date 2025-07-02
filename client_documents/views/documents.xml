@@ -128,7 +128,7 @@
             <field name="name">client_documents_tree_view</field>
             <field name="model">res.partner.document</field>
             <field name="arch" type="xml">
-                <list decoration-success="is_verify == True">
+                <list decoration-success="show_verified_ribbon == True">
                     <field name="name" />
                     <field name="issue_date" />
                     <field name="expiration_date" />
@@ -146,7 +146,7 @@
             <field name="name">client_documents_tree_view</field>
             <field name="model">res.partner.document</field>
             <field name="arch" type="xml">
-                <list create="1" delete="1" decoration-success="is_verify == True">
+                <list create="1" delete="1" decoration-success="show_verified_ribbon == True">
                     <field name="name" />
                     <field name="issue_date" />
                     <field name="expiration_date" />
@@ -165,6 +165,7 @@
             <field name="model">res.partner.document</field>
             <field name="arch" type="xml">
                 <form delete="0">
+                    <field name="show_verified_ribbon" invisible="1"/>
                     <sheet>
                         <div class="oe_title">
                             <h1>
@@ -172,8 +173,6 @@
                             </h1>
                         </div>
                         <group>
-                            <widget name="web_ribbon" title="Verify"
-                                modifiers="{'invisible': [('is_verify', '=', False)]}" />
                             <group>
                                 <field name="name" />
                                 <field name="issue_date" />
@@ -192,6 +191,7 @@
                             </group>
                         </group>
                     </sheet>
+                    <widget name="web_ribbon" title="Verified" modifiers="{'invisible': [('is_verify', '=', False)]}" />
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers" />
                         <field name="activity_ids" widget="mail_activity" />

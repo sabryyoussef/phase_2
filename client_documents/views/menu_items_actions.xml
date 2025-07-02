@@ -86,4 +86,6 @@
             action="contacts_documents_type_action_user"
             sequence="3"
     />
+
+
 </odoo>
