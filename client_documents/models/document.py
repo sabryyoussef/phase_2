@@ -11,7 +11,7 @@ class Document(models.Model):
         copy=False,
         readonly=True,
         index=True,
-        default=lambda self: _("New"),
+        default="New",
         tracking=True,
     )
 
