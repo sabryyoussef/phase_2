@@ -19,6 +19,7 @@
         "crm",
         "cabinet_directory",
         "mass_mailing",
+        "calendar",
     ],
     "data": [
         "security/ir.model.access.csv",
