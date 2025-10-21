@@ -24,27 +24,29 @@ class DocumentsShareWizard(models.Model):
         res['document_share_id'] = self.env.context.get('active_id')
         return res
 
-    def create_activity(self):
-        partners = [self.document_share_id.document_ids[0].partner_id.id, self.create_uid.partner_id.id]
-        partner_commands = [(6, 0, partners)]
-        alarm_commands = [(6, 0, [1, 2])]
-        calendar_event = self.env['calendar.event'].create({
-            'name': self.summary,
-            'start': self.date_from,
-            'stop': self.date_to,
-            'user_id': self.assigned_to_id.id,
-            'show_as': 'free',
-            'partner_ids': partner_commands,
-            'alarm_ids': alarm_commands,
-            'document_share_id': self.document_share_id.id,
-        })
-        self.env['mail.activity'].create({
-            'activity_type_id': self.activity_type_id.id,
-            'summary': self.summary,
-            'date_deadline': self.date_to,
-            'user_id': self.assigned_to_id.id,
-            'calendar_event_id': calendar_event.id,
-            'res_id': self.document_share_id.id,
-            'res_model_id': self.env['ir.model']._get('documents.share').id,
-        })
-        return calendar_event
+    # COMMENTED OUT: calendar module dependency causes issues on Odoo.sh
+    # Uncomment this when calendar module is installed
+    # def create_activity(self):
+    #     partners = [self.document_share_id.document_ids[0].partner_id.id, self.create_uid.partner_id.id]
+    #     partner_commands = [(6, 0, partners)]
+    #     alarm_commands = [(6, 0, [1, 2])]
+    #     calendar_event = self.env['calendar.event'].create({
+    #         'name': self.summary,
+    #         'start': self.date_from,
+    #         'stop': self.date_to,
+    #         'user_id': self.assigned_to_id.id,
+    #         'show_as': 'free',
+    #         'partner_ids': partner_commands,
+    #         'alarm_ids': alarm_commands,
+    #         'document_share_id': self.document_share_id.id,
+    #     })
+    #     self.env['mail.activity'].create({
+    #         'activity_type_id': self.activity_type_id.id,
+    #         'summary': self.summary,
+    #         'date_deadline': self.date_to,
+    #         'user_id': self.assigned_to_id.id,
+    #         'calendar_event_id': calendar_event.id,
+    #         'res_id': self.document_share_id.id,
+    #         'res_model_id': self.env['ir.model']._get('documents.share').id,
+    #     })
+    #     return calendar_event

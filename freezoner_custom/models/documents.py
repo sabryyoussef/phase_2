@@ -129,32 +129,34 @@ class DocumentsShare(models.Model):
             },
         }
 
-    def action_schedule_meeting(self, smart_calendar=True):
-        self.ensure_one()
-        action = self.env["ir.actions.actions"]._for_xml_id(
-            "calendar.action_calendar_event"
-        )
-        partner_ids = self.env.user.partner_id.ids
-        if self.partner_id:
-            partner_ids.append(self.partner_id.id)
-        current_opportunity_id = self.lead_id.id or False
-
-        # Add the domain to filter events by the document_share_id
-        action["domain"] = [("document_share_id", "=", self.id)]
-
-        action["context"] = {
-            "search_default_opportunity_id": current_opportunity_id,
-            "default_opportunity_id": current_opportunity_id,
-            "default_partner_id": self.partner_id.id,
-            "default_partner_ids": partner_ids,
-            "default_name": self.name,
-            "default_document_share_id": self.id,  # Pass the document_share_id to the new event
-        }
-        # 'Smart' calendar view: get the most relevant time period to display to the user.
-        # if current_opportunity_id and smart_calendar:
-        #     mode, initial_date = self._get_opportunity_meeting_view_parameters()
-        #     action['context'].update({'default_mode': mode, 'initial_date': initial_date})
-        return action
+    # COMMENTED OUT: calendar module dependency causes issues on Odoo.sh
+    # Uncomment this when calendar module is installed
+    # def action_schedule_meeting(self, smart_calendar=True):
+    #     self.ensure_one()
+    #     action = self.env["ir.actions.actions"]._for_xml_id(
+    #         "calendar.action_calendar_event"
+    #     )
+    #     partner_ids = self.env.user.partner_id.ids
+    #     if self.partner_id:
+    #         partner_ids.append(self.partner_id.id)
+    #     current_opportunity_id = self.lead_id.id or False
+    #     
+    #     # Add the domain to filter events by the document_share_id
+    #     action["domain"] = [("document_share_id", "=", self.id)]
+    #     
+    #     action["context"] = {
+    #         "search_default_opportunity_id": current_opportunity_id,
+    #         "default_opportunity_id": current_opportunity_id,
+    #         "default_partner_id": self.partner_id.id,
+    #         "default_partner_ids": partner_ids,
+    #         "default_name": self.name,
+    #         "default_document_share_id": self.id,  # Pass the document_share_id to the new event
+    #     }
+    #     # 'Smart' calendar view: get the most relevant time period to display to the user.
+    #     # if current_opportunity_id and smart_calendar:
+    #     #     mode, initial_date = self._get_opportunity_meeting_view_parameters()
+    #     #     action['context'].update({'default_mode': mode, 'initial_date': initial_date})
+    #     return action
 
     @api.model
     def open_share_popup(self, vals):
